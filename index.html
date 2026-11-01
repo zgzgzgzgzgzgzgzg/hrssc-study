@@ -1,0 +1,1033 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="format-detection" content="telephone=no">
+<title>HRSSC 刷题台 · 人力资源共享服务</title>
+<style>
+:root{
+  --bg:#0f1115; --card:#171a21; --card2:#1e222b; --line:#2a2f3a;
+  --txt:#e6e9ef; --dim:#9aa4b2; --accent:#5b9cff; --ok:#35c07d; --bad:#f2555a; --warn:#e8b04b;
+  --radius:14px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--txt);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+  font-size:15px;line-height:1.65}
+.wrap{max-width:820px;margin:0 auto;padding:14px 14px 132px}
+header.top{display:flex;align-items:center;gap:10px;padding:8px 2px 14px;flex-wrap:wrap}
+header.top h1{font-size:17px;margin:0;font-weight:600;letter-spacing:.3px}
+header.top .sub{color:var(--dim);font-size:12px;margin-left:auto}
+.btn{border:1px solid var(--line);background:var(--card2);color:var(--txt);
+  padding:8px 14px;border-radius:10px;font-size:14px;cursor:pointer;transition:.15s;
+  font-family:inherit}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#06101f;font-weight:600}
+.btn.ghost{background:transparent}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn.sm{padding:5px 10px;font-size:13px;border-radius:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin-bottom:12px}
+.grid{display:grid;gap:10px}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(2,1fr)}
+@media(min-width:620px){.g4{grid-template-columns:repeat(4,1fr)}}
+.tile{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:12px;cursor:pointer;transition:.15s}
+.tile:hover{border-color:var(--accent);transform:translateY(-1px)}
+.tile .k{font-size:13px;color:var(--dim)}
+.tile .v{font-size:19px;font-weight:700;margin-top:2px}
+.tile .d{font-size:11px;color:var(--dim);margin-top:3px;line-height:1.4}
+.badge{display:inline-block;padding:1px 8px;border-radius:999px;font-size:11px;
+  border:1px solid var(--line);color:var(--dim);background:#141821}
+.badge.single{color:#7fb3ff;border-color:#2c4a7a}
+.badge.multi{color:#c79bff;border-color:#4a3570}
+.badge.judge{color:#5ed3a8;border-color:#255f49}
+.badge.short{color:#ffce6b;border-color:#6d5320}
+.badge.task{color:#ff9b8a;border-color:#6d3a30}
+.stem{font-size:16.5px;line-height:1.75;font-weight:600;margin:10px 0 14px;white-space:pre-wrap}
+.ctx{color:var(--dim);font-size:14px;line-height:1.7;margin:6px 0 12px;white-space:pre-wrap}
+.opt{display:flex;gap:10px;align-items:flex-start;padding:11px 13px;border:1px solid var(--line);
+  border-radius:11px;background:var(--card2);margin-bottom:9px;cursor:pointer;transition:.12s;
+  user-select:none;-webkit-user-select:none}
+.opt:hover{border-color:#3d5573}
+.opt .lab{font-weight:700;color:var(--accent);min-width:16px}
+.opt.sel{border-color:var(--accent);background:#16253c}
+.opt.right{border-color:var(--ok);background:#12291e}
+.opt.right .lab{color:var(--ok)}
+.opt.wrong{border-color:var(--bad);background:#2b1417}
+.opt.wrong .lab{color:var(--bad)}
+.opt.dim{opacity:.55}
+.pane{border-radius:10px;padding:12px 14px;margin-top:12px;font-size:14px;line-height:1.75;white-space:pre-wrap}
+.pane.ok{background:#11261a;border:1px solid #255f49}
+.pane.bad{background:#2a1416;border:1px solid #6d3a30}
+.pane.info{background:#141a24;border:1px solid var(--line);color:var(--dim)}
+.pane b{color:var(--txt)}
+.rowbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:14px}
+.progress{height:6px;background:#1d222b;border-radius:99px;overflow:hidden;margin:10px 0 0}
+.progress > i{display:block;height:100%;width:0;background:linear-gradient(90deg,#5b9cff,#35c07d);transition:width .25s}
+.tiny{font-size:12px;color:var(--dim)}
+.mono{font-variant-numeric:tabular-nums}
+hr.sep{border:0;border-top:1px solid var(--line);margin:14px 0}
+.nav{position:fixed;left:0;right:0;bottom:0;background:rgba(15,17,21,.94);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  border-top:1px solid var(--line);padding:10px 14px;
+  display:flex;gap:8px;justify-content:center;flex-wrap:wrap;z-index:9}
+.nav .btn{min-width:92px}
+.hide{display:none!important}
+.timer{font-variant-numeric:tabular-nums;font-weight:700;color:var(--warn)}
+select,input[type=text]{background:var(--card2);color:var(--txt);border:1px solid var(--line);
+  border-radius:9px;padding:7px 10px;font-size:14px;font-family:inherit}
+.kbd{font-size:11.5px;color:var(--dim);border:1px solid var(--line);border-radius:5px;padding:1px 5px}
+.bar{height:14px;background:#1d222b;border-radius:6px;overflow:hidden;margin:4px 0}
+.bar > i{display:block;height:100%;background:var(--accent)}
+table.t{width:100%;border-collapse:collapse;font-size:13.5px}
+table.t th,table.t td{padding:7px 8px;border-bottom:1px solid var(--line);text-align:left}
+table.t th{color:var(--dim);font-weight:600}
+.warnbox{background:#2a2110;border:1px solid #6d5320;color:#ffce6b;padding:12px 14px;border-radius:10px;font-size:13.5px}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+<header class="top">
+  <h1>HRSSC 刷题台</h1>
+  <span class="sub" id="hdSub">5 套模拟卷 · 230 题</span>
+</header>
+
+<section id="vHome">
+  <div class="card hide" id="nameCard" style="border-color:#33507d">
+    <div style="font-weight:600;margin-bottom:6px">先起个名字</div>
+    <div class="tiny" style="margin-bottom:10px">只用来给成绩单和错题本署名，存在你自己的手机里，不会上传。</div>
+    <div class="rowbar" style="margin-top:0">
+      <input type="text" id="nameInput" maxlength="16" placeholder="例：李同学 / 张桂" style="flex:1;min-width:180px">
+      <button class="btn primary" onclick="saveName()">开始使用</button>
+    </div>
+  </div>
+
+  <div class="grid g4" style="margin-bottom:12px">
+    <div class="tile" onclick="startExamPick()"><div class="k">模拟考</div><div class="v">整卷</div><div class="d">100 分 / 120 分钟</div></div>
+    <div class="tile" onclick="startPractice({scope:'all',mode:'practice'})"><div class="k">练习</div><div class="v">全库</div><div class="d">200 客观 + 30 主观</div></div>
+    <div class="tile" onclick="startSRS()"><div class="k">闪卡复习</div><div class="v" id="dueCount">0</div><div class="d">今日到期</div></div>
+    <div class="tile" onclick="showWrong()"><div class="k">错题本</div><div class="v" id="wrongCount">0</div><div class="d">按错次排序</div></div>
+  </div>
+
+  <div class="card">
+    <div class="tiny" style="margin-bottom:8px">按卷练习 / 按题型专项</div>
+    <div class="grid g3" id="paperGrid" style="margin-bottom:10px"></div>
+    <hr class="sep">
+    <div class="grid g4">
+      <div class="tile" onclick="startPractice({scope:'all',mode:'practice',only:'single'})"><div class="k">单选</div><div class="v">100</div></div>
+      <div class="tile" onclick="startPractice({scope:'all',mode:'practice',only:'multi'})"><div class="k">多选</div><div class="v">50</div></div>
+      <div class="tile" onclick="startPractice({scope:'all',mode:'practice',only:'judge'})"><div class="k">判断</div><div class="v">50</div></div>
+      <div class="tile" onclick="startPractice({scope:'all',mode:'practice',only:'short'})"><div class="k">简答+实操</div><div class="v">30</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="tiny" style="margin-bottom:10px">进度与错因</div>
+    <div id="statsBox"></div>
+    <hr class="sep">
+    <div class="rowbar" style="margin-top:0">
+      <button class="btn sm ghost" onclick="exportProgress()">导出进度</button>
+      <button class="btn sm ghost" onclick="document.getElementById('impFile').click()">导入进度</button>
+      <input type="file" id="impFile" accept=".json" class="hide" onchange="importProgress(this)">
+      <button class="btn sm ghost" onclick="resetProgress()">清空记录</button>
+    </div>
+    <div class="tiny" style="margin-top:8px">进度存在本机浏览器，不上传。换设备用导出/导入搬。</div>
+    <hr class="sep">
+    <div class="rowbar" style="margin-top:0">
+      <span class="tiny" id="nameLine"></span>
+      <button class="btn sm ghost" onclick="changeName()" style="margin-left:auto">改名</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="tiny" style="margin-bottom:10px">分享 / 导出</div>
+    <div class="rowbar" style="margin-top:0">
+      <button class="btn sm" onclick="copyShareText()">复制我的成绩单</button>
+      <button class="btn sm ghost" onclick="exportWrongDoc()">错题本导出 Word</button>
+    </div>
+    <div class="pane info hide" id="shareOut"></div>
+    <div class="tiny" style="margin-top:8px">成绩单是纯文字，微信里直接粘贴发送。</div>
+  </div>
+</section>
+
+<section id="vQuiz" class="hide">
+  <div class="card">
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+      <span class="badge" id="qBadge"></span>
+      <span class="tiny" id="qMeta"></span>
+      <span class="tiny timer" id="qTimer" style="margin-left:auto"></span>
+    </div>
+    <div class="progress"><i id="qProg"></i></div>
+    <div class="tiny" style="margin-top:6px" id="qPos"></div>
+
+    <div class="ctx" id="qCtx"></div>
+    <div class="stem" id="qStem"></div>
+    <div id="qOpts"></div>
+
+    <div class="pane info hide" id="qHint"></div>
+    <div class="pane ok hide" id="qAnsOk"></div>
+    <div class="pane bad hide" id="qAnsBad"></div>
+    <div class="pane info hide" id="qExp"></div>
+    <div class="pane info hide" id="qRef"></div>
+
+    <div class="rowbar" id="qBar"></div>
+    <div class="tiny" style="margin-top:10px" id="qKeys"></div>
+  </div>
+</section>
+
+<section id="vResult" class="hide">
+  <div class="card">
+    <div id="resHead"></div>
+    <hr class="sep">
+    <div id="resBody"></div>
+    <div class="rowbar">
+      <button class="btn primary" onclick="goHome()">回首页</button>
+      <button class="btn" onclick="retryWrongOnly()">只练本次错的</button>
+    </div>
+  </div>
+</section>
+
+<nav class="nav hide" id="nav">
+  <button class="btn" id="navPrev" onclick="prevQ()">上一题</button>
+  <button class="btn primary" id="navMain" onclick="mainAction()">下一题</button>
+  <button class="btn" id="navNext" onclick="nextQ()">下一题</button>
+  <button class="btn ghost" onclick="quitSession()">退出</button>
+</nav>
+</div>
+
+<div id="dlg" class="hide" style="position:fixed;top:0;right:0;bottom:0;left:0;z-index:99;
+  background:rgba(0,0,0,.72);display:flex;align-items:center;justify-content:center;padding:18px">
+  <div style="background:var(--card);border:1px solid var(--line);border-radius:16px;
+    padding:18px;max-width:400px;width:100%">
+    <div id="dlgTitle" style="font-size:16px;font-weight:600;margin-bottom:8px"></div>
+    <div id="dlgMsg" style="font-size:14px;line-height:1.7;color:var(--dim);white-space:pre-wrap;margin-bottom:14px"></div>
+    <input type="text" id="dlgInput" class="hide" style="width:100%;margin-bottom:14px"
+      maxlength="16" placeholder="输入后点确定">
+    <div id="dlgBtns" style="display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap"></div>
+  </div>
+</div>
+<script>
+var DATA = {"questions":[{"id":"P1-single-1","paper":1,"focus":"第一章　人力资源共享服务概述与发展；第二章　员工人事共享服务模块","type":"single","num":1,"stem":"1．人力资源共享服务中心的英文简称是（  ）。","options":{"A":"HRBP","B":"HRSSC","C":"COE","D":"HRIS"},"context":[],"answer":"B","explanation":"HRSSC 即 Human Resource Shared Service Center（人力资源共享服务中心）；HRBP 为人力资源业务伙伴，COE 为人力资源专家中心，HRIS 为人力资源信息系统。","scoring":""},{"id":"P1-single-2","paper":1,"focus":"第一章　人力资源共享服务概述与发展；第二章　员工人事共享服务模块","type":"single","num":2,"stem":"2．在人力资源三支柱模型中，负责企业人力资源战略、制度与政策设计的是（  ）。","options":{"A":"HRSSC","B":"HRBP","C":"COE","D":"SSC 服务台"},"context":[],"answer":"C","explanation":"COE（Center of Expertise，人力资源专家中心）负责顶层设计与政策制定；HRBP 负责贴近业务一线诊断并交付方案；HRSSC 负责事务性、标准化的共享服务执行。","scoring":""},{"id":"P1-single-3","paper":1,"focus":"第一章　人力资源共享服务概述与发展；第二章　员工人事共享服务模块","type":"single","num":3,"stem":"3．下列共享服务模式中，企业内部业务单元可自主选择是否购买 SSC 服务、并按服务量付费的是（  ）。","options":{"A":"市场模式","B":"强制模式","C":"推荐模式","D":"集中模式"},"context":[],"answer":"A","explanation":"市场模式下 SSC 以“内部市场化”方式运作，业务单元可自主选择、按量付费；强制模式要求必须统一使用 SSC 服务；推荐模式介于两者之间，鼓励但不强制。","scoring":""},{"id":"P1-single-4","paper":1,"focus":"第一章　人力资源共享服务概述与发展；第二章　员工人事共享服务模块","type":"single","num":4,"stem":"4．HRSSC 建设流程的第一步通常是（  ）。","options":{"A":"系统选型","B":"可行性分析","C":"服务目录设计","D":"组织设计"},"context":[],"answer":"B","explanation":"HRSSC 建设一般遵循“可行性分析→业务流程梳理→服务目录设计→系统选型→组织设计→试点运行→全面推广”七步法，可行性分析是起点。","scoring":""},{"id":"P1-single-5","paper":1,"focus":"第一章　人力资源共享服务概述与发展；第二章　员工人事共享服务模块","type":"single","num":5,"stem":"5．下列不属于 HRSSC 常用服务质效考核指标的是（  ）。","options":{"A":"响应时效","B":"一次解决率","C":"员工满意度","D":"员工家庭年收入"},"context":[],"answer":"D","explanation":"HRSSC 运营质效通常以响应时效、一次解决率（FCR）、员工满意度三类指标闭环管理；员工家庭年收入与服务质量无关，且涉及隐私。","scoring":""},{"id":"P1-single-6","paper":1,"focus":"第一章　人力资源共享服务概述与发展；第二章　员工人事共享服务模块","type":"single","num":6,"stem":"6．在员工档案管理中，负责档案相关流程和规范的建立与制定，并按规范建立和管理员工档案的是（  ）。","options":{"A":"HRSSC","B":"HRBP","C":"COE","D":"CFO"},"context":[],"answer":"A","explanation":"SSC 模式最强调员工档案管理的专业性、规范性与执行一致性，由 HRSSC 建章立制并统一执行。","scoring":""},{"id":"P1-single-7","paper":1,"focus":"第一章　人力资源共享服务概述与发展；第二章　员工人事共享服务模块","type":"single","num":7,"stem":"7．整理后的员工档案应具备的基本特性不包括（  ）。","options":{"A":"完整","B":"真实","C":"复杂","D":"实用"},"context":[],"answer":"C","explanation":"整理档案应做到分类明确、编排有序、目录清楚、封装整齐，整理后档案应完整、真实、条理、精炼、实用，“复杂”不符合要求。","scoring":""},{"id":"P1-single-8","paper":1,"focus":"第一章　人力资源共享服务概述与发展；第二章　员工人事共享服务模块","type":"single","num":8,"stem":"8．员工离职的类型一般分为（  ）。","options":{"A":"协商离职与强制离职","B":"主动离职与被动离职","C":"试用离职与正式离职","D":"书面离职与口头离职"},"context":[],"answer":"B","explanation":"员工离职分为主动离职（员工主动提出辞职）与被动离职（企业提出解除或终止）两大类。","scoring":""},{"id":"P1-single-9","paper":1,"focus":"第一章　人力资源共享服务概述与发展；第二章　员工人事共享服务模块","type":"single","num":9,"stem":"9．根据《劳动合同法》，劳动合同期限 3 年以上固定期限和无固定期限的，试用期最长不得超过（  ）。","options":{"A":"1 个月","B":"2 个月","C":"3 个月","D":"6 个月"},"context":[],"answer":"D","explanation":"劳动合同期限 3 个月以上不满 1 年的，试用期不超过 1 个月；1 年以上不满 3 年的，不超过 2 个月；3 年以上固定期限和无固定期限的，不超过 6 个月。","scoring":""},{"id":"P1-single-10","paper":1,"focus":"第一章　人力资源共享服务概述与发展；第二章　员工人事共享服务模块","type":"single","num":10,"stem":"10．下列关于试用期的表述，正确的是（  ）。","options":{"A":"同一用人单位与同一劳动者可以约定两次试用期","B":"以完成一定工作任务为期限的劳动合同不得约定试用期","C":"试用期工资可以低于当地最低工资标准","D":"劳动者在试用期离职需提前 30 日书面通知"},"context":[],"answer":"B","explanation":"以完成一定工作任务为期限或期限不满 3 个月的劳动合同不得约定试用期；同一单位与同一劳动者只能约定一次试用期；试用期工资不低于本单位同岗最低档工资或合同约定工资的 80%，且不低于当地最低工资；试用期离职提前 3 日通知即可。","scoring":""},{"id":"P1-single-11","paper":1,"focus":"第一章　人力资源共享服务概述与发展；第二章　员工人事共享服务模块","type":"single","num":11,"stem":"11．员工请婚假、产假等假期时，HRSSC 通常要求提供的核心材料是（  ）。","options":{"A":"户口本原件","B":"结婚证、生育证明等证明材料","C":"房产证","D":"无犯罪记录证明"},"context":[],"answer":"B","explanation":"婚假、产假等法定假期需以结婚证、生育证明等为依据核验，HRSSC 凭证明材料在系统中完成假期类型与天数维护。","scoring":""},{"id":"P1-single-12","paper":1,"focus":"第一章　人力资源共享服务概述与发展；第二章　员工人事共享服务模块","type":"single","num":12,"stem":"12．考勤管理最直接的作用是（  ）。","options":{"A":"规范员工出勤行为","B":"提高员工工作积极性","C":"规范公司财务制度","D":"促进员工职业发展"},"context":[],"answer":"A","explanation":"考勤管理是企业为规范员工出勤行为、确保正常工作秩序、加强公司纪律、提高工作效率而制定的基本管理制度。","scoring":""},{"id":"P1-single-13","paper":1,"focus":"第一章　人力资源共享服务概述与发展；第二章　员工人事共享服务模块","type":"single","num":13,"stem":"13．下列考勤科技手段中，不属于常见考勤方式的是（  ）。","options":{"A":"指纹机","B":"刷卡机","C":"人脸识别机","D":"卫星定位导弹"},"context":[],"answer":"D","explanation":"企业常用考勤手段包括指纹机、刷卡机、人脸识别机、手机 APP 定位打卡等；D 为干扰项。","scoring":""},{"id":"P1-single-14","paper":1,"focus":"第一章　人力资源共享服务概述与发展；第二章　员工人事共享服务模块","type":"single","num":14,"stem":"14．员工咨询应答中，遇到超出 HRSSC 权限或涉及政策解释的问题，正确的做法是（  ）。","options":{"A":"直接拒绝答复","B":"凭个人经验随意答复","C":"记录后按流程升级至 COE 或 HRBP 处理","D":"让员工自行上网查询"},"context":[],"answer":"C","explanation":"HRSSC 应在服务目录与授权边界内答复，超出权限的工单应按流程升级至 COE（政策类）或 HRBP（业务类），并做到事事有回音、件件有记录。","scoring":""},{"id":"P1-single-15","paper":1,"focus":"第一章　人力资源共享服务概述与发展；第二章　员工人事共享服务模块","type":"single","num":15,"stem":"15．职工和用人单位发生劳动争议时，正确的处理路径是（  ）。","options":{"A":"首先按照企业内部劳动规则进行处理","B":"由劳动仲裁机关协助处理","C":"交由法院直接处理","D":"依法定的劳动争议处理程序予以处理"},"context":[],"answer":"D","explanation":"劳动争议依法按“协商—调解—仲裁—诉讼”的法定程序处理，仲裁是诉讼的前置程序。","scoring":""},{"id":"P1-single-16","paper":1,"focus":"第一章　人力资源共享服务概述与发展；第二章　员工人事共享服务模块","type":"single","num":16,"stem":"16．在薪酬核算的三支柱分工中，负责具体薪酬计算、发放与复核管理的是（  ）。","options":{"A":"HRM","B":"COE","C":"HRSSC","D":"HRBP"},"context":[],"answer":"C","explanation":"COE 负责薪酬策略与制度设计，HRBP 负责业务侧绩效与调薪沟通，HRSSC 负责数据采集、核算、发放与复核。","scoring":""},{"id":"P1-single-17","paper":1,"focus":"第一章　人力资源共享服务概述与发展；第二章　员工人事共享服务模块","type":"single","num":17,"stem":"17．根据个人所得税法律制度，下列属于综合所得的是（  ）。","options":{"A":"经营所得","B":"劳务报酬所得","C":"利息、股息、红利所得","D":"财产租赁所得"},"context":[],"answer":"B","explanation":"综合所得包括工资薪金所得、劳务报酬所得、稿酬所得、特许权使用费所得四项。","scoring":""},{"id":"P1-single-18","paper":1,"focus":"第一章　人力资源共享服务概述与发展；第二章　员工人事共享服务模块","type":"single","num":18,"stem":"18．居民个人取得综合所得需要办理汇算清缴的时间是（  ）。","options":{"A":"取得所得的当年 1 月 1 日至 5 月 31 日","B":"取得所得的当年 3 月 1 日至 6 月 30 日","C":"取得所得的次年 1 月 1 日至 5 月 31 日","D":"取得所得的次年 3 月 1 日至 6 月 30 日"},"context":[],"answer":"D","explanation":"居民个人取得综合所得按年计算个人所得税，需要办理汇算清缴的，应当在取得所得的次年 3 月 1 日至 6 月 30 日内办理。","scoring":""},{"id":"P1-single-19","paper":1,"focus":"第一章　人力资源共享服务概述与发展；第二章　员工人事共享服务模块","type":"single","num":19,"stem":"19．在 HRSSC 常用的数字化系统中，属于企业资源计划简称的是（  ）。","options":{"A":"SAP","B":"ERP","C":"OA","D":"BI"},"context":[],"answer":"B","explanation":"ERP（Enterprise Resource Planning）是企业资源计划；SAP 是典型 ERP 软件厂商，OA 是协同办公系统，BI 是商业智能分析工具。","scoring":""},{"id":"P1-single-20","paper":1,"focus":"第一章　人力资源共享服务概述与发展；第二章　员工人事共享服务模块","type":"single","num":20,"stem":"20．流程优化方法 ESIA 中，字母 A 代表的含义是（  ）。","options":{"A":"清除","B":"简化","C":"整合","D":"自动化"},"context":[],"answer":"D","explanation":"ESIA 即清除（Eliminate）、简化（Simplify）、整合（Integrate）、自动化（Automate）。","scoring":""},{"id":"P1-multi-1","paper":1,"focus":"第一章　人力资源共享服务概述与发展；第二章　员工人事共享服务模块","type":"multi","num":1,"stem":"1．人力资源三支柱模型包括（  ）。","options":{"A":"COE","B":"HRBP","C":"HRSSC","D":"CFO"},"context":[],"answer":"ABC","explanation":"三支柱为 COE（专家中心）、HRBP（业务伙伴）、HRSSC（共享服务中心）；CFO 是财务负责人，不属于三支柱。","scoring":""},{"id":"P1-multi-2","paper":1,"focus":"第一章　人力资源共享服务概述与发展；第二章　员工人事共享服务模块","type":"multi","num":2,"stem":"2．HRSSC 常见的内部组织单元包括（  ）。","options":{"A":"服务台（工单/热线）","B":"运营管理","C":"流程管理","D":"系统支持"},"context":[],"answer":"ABCD","explanation":"HRSSC 内部通常设置服务台（统一受理）、运营管理（质效与考核）、流程管理（流程梳理与优化）、系统支持（eHR/OA 运维）四类职能。","scoring":""},{"id":"P1-multi-3","paper":1,"focus":"第一章　人力资源共享服务概述与发展；第二章　员工人事共享服务模块","type":"multi","num":3,"stem":"3．员工入职前文件包通常包含的材料有（  ）。","options":{"A":"拟入职体检通知书","B":"背景调查表","C":"拟录用条件确认函","D":"拟录用通知书（Offer）"},"context":[],"answer":"ABCD","explanation":"入职前文件包一般包括体检通知、背景调查、录用条件确认、Offer 发放四项，用于锁定录用条件并规避后续争议。","scoring":""},{"id":"P1-multi-4","paper":1,"focus":"第一章　人力资源共享服务概述与发展；第二章　员工人事共享服务模块","type":"multi","num":4,"stem":"4．员工离职文件包通常包含（  ）。","options":{"A":"离职申请/离职审批","B":"工作交接单","C":"社保停缴与公积金封存手续","D":"离职证明"},"context":[],"answer":"ABCD","explanation":"离职手续需完成申请审批、工作交接、社保公积金停缴/封存、出具离职证明，并同步关闭系统权限。","scoring":""},{"id":"P1-multi-5","paper":1,"focus":"第一章　人力资源共享服务概述与发展；第二章　员工人事共享服务模块","type":"multi","num":5,"stem":"5．企业考勤管理常用的科技手段有（  ）。","options":{"A":"指纹机","B":"刷卡机","C":"人脸识别机","D":"手机 APP 定位打卡"},"context":[],"answer":"ABCD","explanation":"四类均为企业常见考勤手段，可与 eHR 考勤模块对接实现数据自动汇总。","scoring":""},{"id":"P1-multi-6","paper":1,"focus":"第一章　人力资源共享服务概述与发展；第二章　员工人事共享服务模块","type":"multi","num":6,"stem":"6．SSC 模式下员工档案管理最强调的性质有（  ）。","options":{"A":"灵活性","B":"专业性","C":"规范性","D":"执行一致性"},"context":[],"answer":"BCD","explanation":"SSC 模式强调专业性、规范性及执行的一致性，而非各自为政的灵活性。","scoring":""},{"id":"P1-multi-7","paper":1,"focus":"第一章　人力资源共享服务概述与发展；第二章　员工人事共享服务模块","type":"multi","num":7,"stem":"7．下列情形中，除劳动者提出订立固定期限劳动合同外，应当订立无固定期限劳动合同的有（  ）。","options":{"A":"劳动者在该用人单位连续工作满 10 年的","B":"连续订立两次固定期限劳动合同，且劳动者没有法定除外情形，续订劳动合同的","C":"用人单位初次实行劳动合同制度，劳动者在该单位连续工作满 10 年且距法定退休年龄不足 10 年的","D":"劳动者在该用人单位连续工作满 3 年的"},"context":[],"answer":"ABC","explanation":"《劳动合同法》第十四条规定三种应当订立无固定期限劳动合同的情形，D 不满足法定条件。","scoring":""},{"id":"P1-multi-8","paper":1,"focus":"第一章　人力资源共享服务概述与发展；第二章　员工人事共享服务模块","type":"multi","num":8,"stem":"8．HRSSC 进行薪酬核算时，需收集的数据包括（  ）。","options":{"A":"基本工资与岗位工资","B":"考勤与假期数据","C":"社会保险与公积金数据","D":"个人所得税相关数据"},"context":[],"answer":"ABCD","explanation":"薪酬核算需归集基本工资、绩效奖惩、考勤、津贴补贴、社保公积金、个税等数据，形成完整薪酬单。","scoring":""},{"id":"P1-multi-9","paper":1,"focus":"第一章　人力资源共享服务概述与发展；第二章　员工人事共享服务模块","type":"multi","num":9,"stem":"9．员工咨询应答的基本原则包括（  ）。","options":{"A":"及时响应","B":"口径统一、依据制度","C":"信息与数据保密","D":"闭环记录、事事有回音"},"context":[],"answer":"ABCD","explanation":"员工咨询应答应做到及时、口径一致、依据制度、保守秘密，并形成完整工单记录实现闭环。","scoring":""},{"id":"P1-multi-10","paper":1,"focus":"第一章　人力资源共享服务概述与发展；第二章　员工人事共享服务模块","type":"multi","num":10,"stem":"10．下列行为中违反 HRSSC 数据安全与保密要求的有（  ）。","options":{"A":"将薪酬明细表发送给无关同事","B":"用个人邮箱外发员工身份证扫描件","C":"按权限分级在系统内查询员工信息","D":"在工单中记录咨询内容并加密保存"},"context":[],"answer":"AB","explanation":"《个人信息保护法》要求处理个人信息遵循合法、正当、必要与诚信原则，禁止超范围提供与泄露；C、D 属于合规操作。","scoring":""},{"id":"P1-judge-1","paper":1,"focus":"第一章　人力资源共享服务概述与发展；第二章　员工人事共享服务模块","type":"judge","num":1,"stem":"1．正常情况下，员工从小学开始建立人事档案，并在后来的学习、工作中不断补充新的材料，随着员工工作单位的变动而转移。（  ）","options":{},"context":[],"answer":"正确","explanation":"人事档案一般自小学（或初中）阶段起建立，随学习、工作经历不断补充，并随工作单位变动而转递。","scoring":""},{"id":"P1-judge-2","paper":1,"focus":"第一章　人力资源共享服务概述与发展；第二章　员工人事共享服务模块","type":"judge","num":2,"stem":"2．用人单位认为劳动者试用期工作不合格，可以与劳动者再次约定试用期。（  ）","options":{},"context":[],"answer":"错误","explanation":"《劳动合同法》第十九条明确规定，同一用人单位与同一劳动者只能约定一次试用期，不得因“不合格”而再次约定。","scoring":""},{"id":"P1-judge-3","paper":1,"focus":"第一章　人力资源共享服务概述与发展；第二章　员工人事共享服务模块","type":"judge","num":3,"stem":"3．经员工本人书面申请，用人单位可以尊重员工意愿，不为该员工参加社会保险。（  ）","options":{},"context":[],"answer":"错误","explanation":"缴纳社会保险是用人单位与劳动者的法定义务，具有强制性，员工自愿放弃的承诺不具有法律效力。","scoring":""},{"id":"P1-judge-4","paper":1,"focus":"第一章　人力资源共享服务概述与发展；第二章　员工人事共享服务模块","type":"judge","num":4,"stem":"4．员工请病假时，HRSSC 可要求员工提供合规医疗机构出具的诊断证明。（  ）","options":{},"context":[],"answer":"正确","explanation":"病假需以合规医疗机构的诊断证明或病假单为依据，HRSSC 据此核定假期类型与天数。","scoring":""},{"id":"P1-judge-5","paper":1,"focus":"第一章　人力资源共享服务概述与发展；第二章　员工人事共享服务模块","type":"judge","num":5,"stem":"5．HRSSC 在处理员工投诉时，当员工情绪激动，可以不理会其情绪，只关注客观事实。（  ）","options":{},"context":[],"answer":"错误","explanation":"应先共情安抚、稳定情绪，再聚焦客观事实处理，既体现服务意识，也有利于问题闭环解决。","scoring":""},{"id":"P1-judge-6","paper":1,"focus":"第一章　人力资源共享服务概述与发展；第二章　员工人事共享服务模块","type":"judge","num":6,"stem":"6．员工满意度调查的最后一步是对行动计划的执行效果进行跟踪反馈。（  ）","options":{},"context":[],"answer":"正确","explanation":"员工满意度调查步骤为：明确目的与制定方案→选择方法并实施→分析结果并提出改进措施→建立行动计划→跟踪反馈效果。","scoring":""},{"id":"P1-judge-7","paper":1,"focus":"第一章　人力资源共享服务概述与发展；第二章　员工人事共享服务模块","type":"judge","num":7,"stem":"7．只要出台严格的考勤制度并加大处罚力度，就一定能够解决员工迟到问题。（  ）","options":{},"context":[],"answer":"错误","explanation":"考勤管理应刚柔并济、依据制度灵活处理，需结合原因分析（通勤、排班、管理方式）与流程优化，单纯加大处罚往往激化矛盾。","scoring":""},{"id":"P1-judge-8","paper":1,"focus":"第一章　人力资源共享服务概述与发展；第二章　员工人事共享服务模块","type":"judge","num":8,"stem":"8．员工上班途中遭遇车祸、交通管制、暴雨暴雪等不可控因素导致的迟到，企业可依据规章制度灵活处理，不予按违纪处理。（  ）","options":{},"context":[],"answer":"正确","explanation":"对不可抗力或不可归责于员工的客观因素导致的迟到，企业应从人性化管理出发，核实后灵活处理。","scoring":""},{"id":"P1-judge-9","paper":1,"focus":"第一章　人力资源共享服务概述与发展；第二章　员工人事共享服务模块","type":"judge","num":9,"stem":"9．在数字化场景下，HRSSC 员工离职后其系统账号可以保留，方便后续原同事继续查询历史数据。（  ）","options":{},"context":[],"answer":"错误","explanation":"员工离职后必须及时关闭或冻结其系统账号与权限，这是权限分级管理与数据安全防控的基本要求。","scoring":""},{"id":"P1-judge-10","paper":1,"focus":"第一章　人力资源共享服务概述与发展；第二章　员工人事共享服务模块","type":"judge","num":10,"stem":"10．HRSSC 应将所有员工咨询工单统一记录归档，形成知识库沉淀，用于提升一次解决率。（  ）","options":{},"context":[],"answer":"正确","explanation":"工单沉淀与知识库建设是提升一次解决率、缩短响应时效、实现服务标准化的重要抓手。","scoring":""},{"id":"P1-short-1","paper":1,"focus":"第一章　人力资源共享服务概述与发展；第二章　员工人事共享服务模块","type":"short","num":1,"stem":"1．简述 HRSSC 与 HRBP、COE 的三角协同关系。（5 分）","options":{},"context":[],"answer":"（1）COE（人力资源专家中心）：负责人力资源战略、制度与政策的设计，是“大脑”，输出规则与方法论。\n（2）HRBP（人力资源业务伙伴）：下沉到业务一线，诊断业务痛点，整合 COE 资源并向业务交付定制化方案，是“桥梁”。\n（3）HRSSC（人力资源共享服务中心）：承接事务性、标准化、可规模化的服务交付，是“手脚”与“平台”。\n（4）协同逻辑：COE 定规则→HRBP 懂业务→HRSSC 做交付；三者通过服务目录、工单系统与数据平台形成闭环，共同支撑组织效能提升。","explanation":"","scoring":"评分要点：答出三支柱各自定位（各 1 分），答出协同逻辑（1 分），表述完整条理清晰（1 分）。"},{"id":"P1-short-2","paper":1,"focus":"第一章　人力资源共享服务概述与发展；第二章　员工人事共享服务模块","type":"short","num":2,"stem":"2．简述办理员工离职的主要类型及离职手续办理的注意事项。（5 分）","options":{},"context":[],"answer":"类型：主动离职（员工提出辞职）与被动离职（企业提出解除或终止）。\n注意事项：\n（1）离职申请与审批手续完备，明确离职日期与离职原因；\n（2）完成工作交接（文件、资产、账号、客户资料）并签署交接单；\n（3）办理社保停缴、公积金封存或转移，结清工资与经济补偿（如涉及）；\n（4）出具离职证明，办理档案与党组织关系转移；\n（5）及时关闭系统账号与权限，做好数据保密与竞业限制提醒；\n（6）开展离职面谈，收集改进建议并形成记录。","explanation":"","scoring":"评分要点：离职类型（1 分）；交接、社保公积金、离职证明、权限关闭、离职面谈等要点每答对 1 项得 1 分，满分 4 分。"},{"id":"P1-short-3","paper":1,"focus":"第一章　人力资源共享服务概述与发展；第二章　员工人事共享服务模块","type":"short","num":3,"stem":"3．简述员工咨询应答的标准步骤。（5 分）","options":{},"context":[],"answer":"（1）受理与倾听：耐心倾听员工诉求，安抚情绪，确认咨询人身份与事项；\n（2）需求确认：复述并确认员工真实需求，区分咨询类型（政策类、流程类、系统类、投诉类）；\n（3）依据解答：依据制度、服务目录与知识库给出准确、口径统一的答复；\n（4）升级处理：超出权限或涉政策解释的工单，按流程升级至 COE/HRBP；\n（5）记录归档与回访：完整记录工单，纳入知识库沉淀，必要时回访确认满意度。","explanation":"","scoring":"评分要点：五个步骤每答对一步得 1 分；强调“口径统一、闭环记录、知识库沉淀”可适当加分。"},{"id":"P1-short-4","paper":1,"focus":"第一章　人力资源共享服务概述与发展；第二章　员工人事共享服务模块","type":"short","num":4,"stem":"4．简述共享服务三种模式（市场模式、强制模式、推荐模式）的含义与适用场景。（5 分）","options":{},"context":[],"answer":"（1）市场模式：SSC 以内部市场化方式运作，业务单元自主选择是否购买服务并按量付费，适用于共享服务成熟度较高、内部竞争充分的集团型企业。\n（2）强制模式：集团统一要求所有业务单元必须使用 SSC 服务，适用于需快速实现标准化、集中管控的企业。\n（3）推荐模式：总部推荐但不强制使用，业务单元可部分保留自有 HR 职能，适用于 SSC 建设初期或业务差异较大的企业。","explanation":"","scoring":"评分要点：三种模式含义各 1 分，适用场景说明 2 分。"},{"id":"P1-task-1","paper":1,"focus":"第一章　人力资源共享服务概述与发展；第二章　员工人事共享服务模块","type":"task","num":1,"stem":"1．【实操题 1】员工入职办理（10 分）","options":{},"context":["背景：A 集团因业务扩张，需为 3 名前端开发工程师办理入职，入职日期为 2026 年 9 月 8 日。你是 A 集团 HRSSC 的人事服务专员，请在 eHR 系统中完成本次入职办理。","任务：","（1）列出本次入职前需完成的 4 项核心任务单；（4 分）","（2）写出入职当日在 eHR 系统中办理的 6 个操作步骤；（4 分）","（3）指出本次办理中需重点防控的 2 项合规风险点。（2 分）"],"answer":"（1）入职前 4 项任务单：①拟入职体检通知书；②背景调查表（学历、履历、竞业限制核查）；③拟录用条件确认函；④拟录用通知书（Offer）。\n（2）eHR 系统入职 6 步骤：①入职准备（岗位、编制、薪酬标准维护）；②资料审核（身份证、学历证、离职证明、体检报告原件核验）；③文件签署（劳动合同、保密与竞业协议、个人信息表、员工手册签收）；④信息维护（eHR 录入人员基本信息、银行卡、紧急联系人）；⑤权限开通（OA 账号、邮箱、门禁、考勤规则绑定）；⑥人事通知发放（入职欢迎信、入职引导安排、部门对接人通知）。\n（3）合规风险点：①未在用工之日起一个月内订立书面劳动合同，面临二倍工资风险；②未核验前单位离职证明与竞业限制情况，存在“双重雇佣”与商业秘密侵权风险；③体检与背景调查环节未取得员工书面授权，违反《个人信息保护法》。（答出任意 2 项即可）","explanation":"","scoring":"评分要点：任务单 4 项每项 1 分；系统操作步骤每步 0.5—1 分，共 4 分；合规风险每点 1 分，共 2 分。重点看流程规范性、法规依据与风险意识。"},{"id":"P1-task-2","paper":1,"focus":"第一章　人力资源共享服务概述与发展；第二章　员工人事共享服务模块","type":"task","num":2,"stem":"2．【实操题 2】员工咨询应答情景模拟（10 分）","options":{},"context":["背景：员工李某通过 HRSSC 服务热线咨询：“我这个月工资条上社保扣款比上个月多了 200 多块，是不是算错了？另外我想知道年假到底怎么算，我入职才 8 个月，今年能休几天？”","任务：","（1）写出你本次咨询应答的处理流程；（4 分）","（2）针对“社保扣款增多”写出你的答复话术要点；（3 分）","（3）针对“入职 8 个月年假天数”给出计算结论与依据。（3 分）"],"answer":"（1）处理流程：①受理倾听，安抚情绪并核实身份；②确认需求（两项咨询：社保扣款、年假天数）；③查询核对（调取李某近两月社保缴费基数与工资数据、核查年度社保基数调整情况；调取入职日期与年假规则）；④准确答复（口径统一、依据制度）；⑤记录归档，形成工单并纳入知识库；⑥回访确认满意度。\n（2）答复话术要点：“李先生您好，已为您核实：社保个人扣款增加是因为每年 7 月社保缴费基数按上年度月平均工资进行调整，您的缴费基数由××元调整为××元，个人养老保险 8%、医疗保险 2%、失业保险 0.5% 合计比例不变，因此扣款相应增加××元，金额计算无误。我把明细通过企业微信发给您核对，如仍有疑问可随时联系我们。”（要点：核实数据、说明基数调整规则、给出具体数值、留痕反馈）\n（3）年假结论：职工累计工作已满 1 年不满 10 年的，年休假 5 天。李某入职 8 个月，累计工作时间不满 1 年，本年度不享受年休假；按其当年度已过日历天数折算亦不足 1 天，故本年度年休假为 0 天，自入职满 12 个月起可按规定享受年休假（当年度按剩余日历天数折算）。依据：《职工带薪年休假条例》第三条、第五条。","explanation":"","scoring":"评分要点：流程 4 分（受理—确认—核查—答复—归档—回访）；话术 3 分（态度、依据、具体数值、留痕）；年假结论与依据 3 分。考查服务意识、政策准确性与沟通技巧。"},{"id":"P2-single-1","paper":2,"focus":"第三章　薪酬社保共享服务模块（薪酬核算、社保申报、公积金管理、福利发放）","type":"single","num":1,"stem":"1．在薪酬核算的三支柱分工中，负责组织相关人员进行薪酬调研整体策划和实施的是（  ）。","options":{"A":"HRSSC","B":"COE","C":"HRBP","D":"员工本人"},"context":[],"answer":"B","explanation":"COE 负责薪酬策略、制度设计与外部薪酬调研策划；HRSSC 负责数据采集、核算发放；HRBP 负责业务侧沟通与落地。","scoring":""},{"id":"P2-single-2","paper":2,"focus":"第三章　薪酬社保共享服务模块（薪酬核算、社保申报、公积金管理、福利发放）","type":"single","num":2,"stem":"2．HRSSC 依据工资数据制作工资审批报表，一般会发送至（  ）审批。","options":{"A":"总经理","B":"直线经理或 HRBP","C":"员工本人","D":"税务部门"},"context":[],"answer":"B","explanation":"工资审批报表一般发送至直线经理或 HRBP 审核确认，再进入发放流程，确保业务侧对绩效与考勤数据负责。","scoring":""},{"id":"P2-single-3","paper":2,"focus":"第三章　薪酬社保共享服务模块（薪酬核算、社保申报、公积金管理、福利发放）","type":"single","num":3,"stem":"3．员工张某上年度月平均工资为 6000 元，所在用人单位平均工资 8000 元，当地上年度职工月平均工资为 9000 元，张某社保缴费基数最可能是（  ）。","options":{"A":"6000 元","B":"5000 元","C":"9000 元","D":"8000 元"},"context":[],"answer":"A","explanation":"社保缴费基数一般为职工本人上年度月平均工资；低于当地社平工资 60%（5400 元）按 60% 保底，高于 300% 按 300% 封顶。6000 元在区间内，故按其本人工资确定。","scoring":""},{"id":"P2-single-4","paper":2,"focus":"第三章　薪酬社保共享服务模块（薪酬核算、社保申报、公积金管理、福利发放）","type":"single","num":4,"stem":"4．我国住房公积金的单位与个人缴存比例区间一般为（  ）。","options":{"A":"不低于 3%、不高于 8%","B":"不低于 5%、不高于 12%","C":"不低于 8%、不高于 20%","D":"由企业自行决定，无限制"},"context":[],"answer":"B","explanation":"根据《住房公积金管理条例》，职工和单位住房公积金的缴存比例均不得低于职工上一年度月平均工资的 5%，原则上不高于 12%。","scoring":""},{"id":"P2-single-5","paper":2,"focus":"第三章　薪酬社保共享服务模块（薪酬核算、社保申报、公积金管理、福利发放）","type":"single","num":5,"stem":"5．职工个人缴存的住房公积金，由所在单位（  ）从其工资中代扣代缴。","options":{"A":"每月","B":"每季度","C":"每年","D":"每半年"},"context":[],"answer":"A","explanation":"住房公积金由所在单位每月从职工工资中代扣代缴，与社保同步按月申报缴纳。","scoring":""},{"id":"P2-single-6","paper":2,"focus":"第三章　薪酬社保共享服务模块（薪酬核算、社保申报、公积金管理、福利发放）","type":"single","num":6,"stem":"6．企业和个人在国家和地方政府规定比例内实际缴纳的住房公积金，其个人所得税处理为（  ）。","options":{"A":"免征个人所得税","B":"减半征收","C":"全额计征","D":"加倍征收"},"context":[],"answer":"A","explanation":"单位和个人分别在不超过职工本人上一年度月平均工资 12% 的幅度内实际缴存的住房公积金，允许在个人应纳税所得额中扣除；超过部分并入工资薪金计征个税。","scoring":""},{"id":"P2-single-7","paper":2,"focus":"第三章　薪酬社保共享服务模块（薪酬核算、社保申报、公积金管理、福利发放）","type":"single","num":7,"stem":"7．下列个人所得中，属于个人所得税“综合所得”的是（  ）。","options":{"A":"工资薪金所得","B":"经营所得","C":"利息、股息、红利所得","D":"偶然所得"},"context":[],"answer":"A","explanation":"综合所得包括工资薪金、劳务报酬、稿酬、特许权使用费四项；经营所得、利息股息红利所得、偶然所得等分项计征。","scoring":""},{"id":"P2-single-8","paper":2,"focus":"第三章　薪酬社保共享服务模块（薪酬核算、社保申报、公积金管理、福利发放）","type":"single","num":8,"stem":"8．根据个人所得税法律制度，居民个人取得的综合所得按（  ）计算个人所得税。","options":{"A":"次","B":"月","C":"年","D":"季"},"context":[],"answer":"C","explanation":"居民个人取得综合所得按年计算个人所得税，由扣缴义务人按月或按次预扣预缴，次年 3 月 1 日至 6 月 30 日办理汇算清缴。","scoring":""},{"id":"P2-single-9","paper":2,"focus":"第三章　薪酬社保共享服务模块（薪酬核算、社保申报、公积金管理、福利发放）","type":"single","num":9,"stem":"9．下列项目中，不属于个人所得税专项附加扣除项目的是（  ）。","options":{"A":"子女教育","B":"住房贷款利息","C":"赡养老人","D":"个人商业健康保险"},"context":[],"answer":"D","explanation":"现行专项附加扣除包括子女教育、继续教育、大病医疗、住房贷款利息、住房租金、赡养老人、3 岁以下婴幼儿照护；商业健康保险属于其他扣除项目。","scoring":""},{"id":"P2-single-10","paper":2,"focus":"第三章　薪酬社保共享服务模块（薪酬核算、社保申报、公积金管理、福利发放）","type":"single","num":10,"stem":"10．2026 年国庆期间，公司安排员工在 10 月 1 日（法定节假日）加班，其加班工资应不低于本人日或小时工资的（  ）。","options":{"A":"100%","B":"150%","C":"200%","D":"300%"},"context":[],"answer":"D","explanation":"《劳动法》第四十四条：安排劳动者延长工作时间的支付不低于 150% 的工资报酬；休息日安排工作又不能安排补休的支付 200%；法定休假日安排工作的支付 300%，且不得以补休替代。","scoring":""},{"id":"P2-single-11","paper":2,"focus":"第三章　薪酬社保共享服务模块（薪酬核算、社保申报、公积金管理、福利发放）","type":"single","num":11,"stem":"11．员工在休息日加班且公司已安排同等时间补休的，公司（  ）。","options":{"A":"仍需支付 200% 加班工资","B":"可以不支付加班工资","C":"需支付 150% 加班工资","D":"需支付 300% 加班工资"},"context":[],"answer":"B","explanation":"休息日安排工作，企业可优先安排补休；不能安排补休的，才支付 200% 加班工资。法定节假日加班不得以补休替代。","scoring":""},{"id":"P2-single-12","paper":2,"focus":"第三章　薪酬社保共享服务模块（薪酬核算、社保申报、公积金管理、福利发放）","type":"single","num":12,"stem":"12．根据《最低工资规定》，下列不属于最低工资组成部分的是（  ）。","options":{"A":"加班工资","B":"基本工资","C":"岗位工资","D":"计时工资"},"context":[],"answer":"A","explanation":"最低工资不包括：加班加点工资；中班、夜班、高温、低温、井下、有毒有害等特殊工作环境条件下的津贴；法律法规规定的劳动者福利待遇等。","scoring":""},{"id":"P2-single-13","paper":2,"focus":"第三章　薪酬社保共享服务模块（薪酬核算、社保申报、公积金管理、福利发放）","type":"single","num":13,"stem":"13．下列社会保险项目中，已并入职工基本医疗保险实施的是（  ）。","options":{"A":"养老保险","B":"失业保险","C":"生育保险","D":"工伤保险"},"context":[],"answer":"C","explanation":"自 2019 年起，生育保险并入职工基本医疗保险，实现“四险”征缴管理，但生育保险待遇仍然保留。","scoring":""},{"id":"P2-single-14","paper":2,"focus":"第三章　薪酬社保共享服务模块（薪酬核算、社保申报、公积金管理、福利发放）","type":"single","num":14,"stem":"14．职工在上下班途中受到非本人主要责任的交通事故伤害，应当（  ）。","options":{"A":"认定为工伤","B":"不认定为工伤，由个人承担","C":"由所在单位自行决定是否认定","D":"按病假处理"},"context":[],"answer":"A","explanation":"《工伤保险条例》第十四条规定：在上下班途中，受到非本人主要责任的交通事故或者城市轨道交通、客运轮渡、火车事故伤害的，应当认定为工伤。","scoring":""},{"id":"P2-single-15","paper":2,"focus":"第三章　薪酬社保共享服务模块（薪酬核算、社保申报、公积金管理、福利发放）","type":"single","num":15,"stem":"15．失业人员领取失业保险金，需同时满足的条件不包括（  ）。","options":{"A":"失业前用人单位和本人已累计缴费满 1 年","B":"非因本人意愿中断就业","C":"已办理失业登记，并有求职要求","D":"已自行创业并领取营业执照"},"context":[],"answer":"D","explanation":"领取失业保险金需满足：缴费满 1 年、非因本人意愿中断就业、已办理失业登记并有求职要求。自行创业不符合领取条件。","scoring":""},{"id":"P2-single-16","paper":2,"focus":"第三章　薪酬社保共享服务模块（薪酬核算、社保申报、公积金管理、福利发放）","type":"single","num":16,"stem":"16．国家法定产假天数为（  ）。","options":{"A":"56 天","B":"63 天","C":"98 天","D":"128 天"},"context":[],"answer":"C","explanation":"《女职工劳动保护特别规定》第七条：女职工生育享受 98 天产假，其中产前可以休假 15 天；难产、多胞胎等情形另行增加。","scoring":""},{"id":"P2-single-17","paper":2,"focus":"第三章　薪酬社保共享服务模块（薪酬核算、社保申报、公积金管理、福利发放）","type":"single","num":17,"stem":"17．下列关于住房公积金提取的说法，正确的是（  ）。","options":{"A":"商业楼属于个人自住住房性质，可以使用公积金贷款","B":"职工离休、退休的，可以提取住房公积金账户内的存储余额","C":"职工死亡后其账户余额自动充公","D":"住房公积金任何情况下都不得提取"},"context":[],"answer":"B","explanation":"离休、退休的可提取并注销账户；商业楼不属于自住住房，不能使用公积金贷款；职工死亡或被宣告死亡的，其继承人、受遗赠人可以提取账户余额。","scoring":""},{"id":"P2-single-18","paper":2,"focus":"第三章　薪酬社保共享服务模块（薪酬核算、社保申报、公积金管理、福利发放）","type":"single","num":18,"stem":"18．HRSSC 在薪酬核算中收到考勤与绩效数据后，第一步应当（  ）。","options":{"A":"直接生成薪酬单并发放","B":"先检查人员名单、人数、假期类型与天数是否存在异常","C":"先将薪酬数据发给全体员工公示","D":"先调整社保缴费基数"},"context":[],"answer":"B","explanation":"收到薪酬数据后应先做数据核查（人员、人数、假期类型与天数、绩效分布等），确认无异常后再进入核算，避免“带病入账”。","scoring":""},{"id":"P2-single-19","paper":2,"focus":"第三章　薪酬社保共享服务模块（薪酬核算、社保申报、公积金管理、福利发放）","type":"single","num":19,"stem":"19．下列不属于常见薪酬核算差错类型的是（  ）。","options":{"A":"加班费漏算","B":"扣款项重复或错误","C":"个税计算基数错误","D":"员工工号顺序排列错误"},"context":[],"answer":"D","explanation":"常见差错集中在加班费漏算、扣款错误、个税基数错误、社保基数未及时调整四类；工号排列顺序不影响金额。","scoring":""},{"id":"P2-single-20","paper":2,"focus":"第三章　薪酬社保共享服务模块（薪酬核算、社保申报、公积金管理、福利发放）","type":"single","num":20,"stem":"20．下列薪酬报表分析关键指标中，用于衡量人工成本投入产出效率的是（  ）。","options":{"A":"薪酬业绩占比","B":"员工平均年龄","C":"员工司龄分布","D":"部门人数"},"context":[],"answer":"A","explanation":"薪酬报表分析常用薪酬业绩占比、薪酬利润占比、人工成本占比、部门间薪酬水平对比等指标，用于衡量投入产出与内部公平性。","scoring":""},{"id":"P2-multi-1","paper":2,"focus":"第三章　薪酬社保共享服务模块（薪酬核算、社保申报、公积金管理、福利发放）","type":"multi","num":1,"stem":"1．一般情况下，HRSSC 进行薪酬核算时需完成的数据收集工作包括（  ）。","options":{"A":"基本工资与岗位工资","B":"绩效与奖惩数据","C":"考勤与假期数据","D":"社保、公积金与个税数据"},"context":[],"answer":"ABCD","explanation":"薪酬核算需归集固定工资、浮动绩效、考勤假期、津补贴、社保公积金个人部分、个税等数据，形成完整薪酬单。","scoring":""},{"id":"P2-multi-2","paper":2,"focus":"第三章　薪酬社保共享服务模块（薪酬核算、社保申报、公积金管理、福利发放）","type":"multi","num":2,"stem":"2．我国社会保险“五险”包括（  ）。","options":{"A":"基本养老保险","B":"基本医疗保险","C":"失业保险与工伤保险","D":"生育保险（已并入医保）"},"context":[],"answer":"ABCD","explanation":"五险为养老、医疗、失业、工伤、生育；2019 年起生育保险并入职工基本医疗保险统一征缴，待遇仍保留。","scoring":""},{"id":"P2-multi-3","paper":2,"focus":"第三章　薪酬社保共享服务模块（薪酬核算、社保申报、公积金管理、福利发放）","type":"multi","num":3,"stem":"3．下列情形中，职工可以提取住房公积金账户存储余额的有（  ）。","options":{"A":"购买、建造、翻建、大修自住住房","B":"离休、退休","C":"完全丧失劳动能力并与单位终止劳动关系","D":"偿还购房贷款本息"},"context":[],"answer":"ABCD","explanation":"《住房公积金管理条例》第二十四条规定六类提取情形，以上四项均属其中。","scoring":""},{"id":"P2-multi-4","paper":2,"focus":"第三章　薪酬社保共享服务模块（薪酬核算、社保申报、公积金管理、福利发放）","type":"multi","num":4,"stem":"4．下列人员中，可以参加或缴纳社会保险的有（  ）。","options":{"A":"企业职工","B":"机关事业单位工作人员","C":"灵活就业人员","D":"无雇工的个体工商户"},"context":[],"answer":"ABCD","explanation":"企业职工随单位参保；灵活就业人员、无雇工的个体工商户可按灵活就业人员身份参加基本养老保险和基本医疗保险。","scoring":""},{"id":"P2-multi-5","paper":2,"focus":"第三章　薪酬社保共享服务模块（薪酬核算、社保申报、公积金管理、福利发放）","type":"multi","num":5,"stem":"5．企业常见的工资发放方式有（  ）。","options":{"A":"现金发放","B":"支票","C":"通过银行代发","D":"微信红包"},"context":[],"answer":"ABC","explanation":"规范做法为通过银行代发，现金与支票在特定情形下仍可存在；以微信红包等个人账户发放工资不利于代扣代缴与凭证留存，属违规风险行为。","scoring":""},{"id":"P2-multi-6","paper":2,"focus":"第三章　薪酬社保共享服务模块（薪酬核算、社保申报、公积金管理、福利发放）","type":"multi","num":6,"stem":"6．员工的工资单通常包含的信息有（  ）。","options":{"A":"工号与姓名","B":"基本工资与绩效奖金","C":"五险一金与个税扣款","D":"实发工资"},"context":[],"answer":"ABCD","explanation":"规范工资单应完整列示应发项、扣款项与实发金额，便于员工核对与劳动监察核查。","scoring":""},{"id":"P2-multi-7","paper":2,"focus":"第三章　薪酬社保共享服务模块（薪酬核算、社保申报、公积金管理、福利发放）","type":"multi","num":7,"stem":"7．根据劳动合同法律制度，除劳动者提出订立固定期限劳动合同外，应当订立无固定期限劳动合同的情形有（  ）。","options":{"A":"劳动者在该用人单位连续工作满 10 年的","B":"连续订立两次固定期限劳动合同，且劳动者没有法定除外情形，续订的","C":"用人单位初次实行劳动合同制度，劳动者连续工作满 10 年且距法定退休年龄不足 10 年的","D":"劳动者在该用人单位连续工作满 1 年的"},"context":[],"answer":"ABC","explanation":"《劳动合同法》第十四条规定的三种法定情形，D 不满足。","scoring":""},{"id":"P2-multi-8","paper":2,"focus":"第三章　薪酬社保共享服务模块（薪酬核算、社保申报、公积金管理、福利发放）","type":"multi","num":8,"stem":"8．HRSSC 在社保申报环节的主要工作包括（  ）。","options":{"A":"办理新增员工参保登记（增员）","B":"办理离职员工停保（减员）","C":"在规定期限内完成月度申报与缴费核对","D":"核定并调整年度缴费基数"},"context":[],"answer":"ABCD","explanation":"社保申报涵盖增员、减员、月度申报缴费、年度基数调整四类核心事务，须在社保经办机构规定时限内完成。","scoring":""},{"id":"P2-multi-9","paper":2,"focus":"第三章　薪酬社保共享服务模块（薪酬核算、社保申报、公积金管理、福利发放）","type":"multi","num":9,"stem":"9．下列做法中，符合薪酬数据保密与合规要求的有（  ）。","options":{"A":"工资单通过加密渠道单独发送给员工本人","B":"薪酬核算结果按权限分级查阅","C":"将全体员工的薪酬明细表发至部门大群","D":"薪酬数据导出后加密存储并限期删除"},"context":[],"answer":"ABD","explanation":"薪酬属核心涉密数据，应最小化范围、分级授权、加密传输与存储；群发薪酬明细严重违反数据保密要求。","scoring":""},{"id":"P2-multi-10","paper":2,"focus":"第三章　薪酬社保共享服务模块（薪酬核算、社保申报、公积金管理、福利发放）","type":"multi","num":10,"stem":"10．下列情形属于应当认定为工伤的有（  ）。","options":{"A":"在工作时间和工作场所内，因工作原因受到事故伤害","B":"工作时间前后在工作场所内，从事与工作有关的预备性或收尾性工作受到事故伤害","C":"在工作时间和工作场所内，因履行工作职责受到暴力等意外伤害","D":"因工外出期间，由于工作原因受到伤害或者发生事故下落不明"},"context":[],"answer":"ABCD","explanation":"《工伤保险条例》第十四条明确列举上述四种应当认定为工伤的情形。","scoring":""},{"id":"P2-judge-1","paper":2,"focus":"第三章　薪酬社保共享服务模块（薪酬核算、社保申报、公积金管理、福利发放）","type":"judge","num":1,"stem":"1．用人单位与劳动者协商一致，可以不为劳动者缴纳社会保险，只要把相应金额直接发给劳动者即可。（  ）","options":{},"context":[],"answer":"错误","explanation":"缴纳社会保险是法定义务，具有强制性，任何“协商放弃、折现发放”的约定均无效，企业仍面临补缴与滞纳金风险。","scoring":""},{"id":"P2-judge-2","paper":2,"focus":"第三章　薪酬社保共享服务模块（薪酬核算、社保申报、公积金管理、福利发放）","type":"judge","num":2,"stem":"2．新入职员工当年社保缴费基数一般按其起薪当月工资确定。（  ）","options":{},"context":[],"answer":"正确","explanation":"新入职职工一般按起薪当月工资申报缴费基数，次年按上年度月平均工资调整。","scoring":""},{"id":"P2-judge-3","paper":2,"focus":"第三章　薪酬社保共享服务模块（薪酬核算、社保申报、公积金管理、福利发放）","type":"judge","num":3,"stem":"3．法定节假日安排劳动者加班，企业可以用安排补休的方式代替支付加班费。（  ）","options":{},"context":[],"answer":"错误","explanation":"法定休假日加班必须支付不低于 300% 的工资报酬，不得以补休替代；休息日加班才可优先安排补休。","scoring":""},{"id":"P2-judge-4","paper":2,"focus":"第三章　薪酬社保共享服务模块（薪酬核算、社保申报、公积金管理、福利发放）","type":"judge","num":4,"stem":"4．离退休人员再任职取得的收入，一律免征个人所得税。（  ）","options":{},"context":[],"answer":"错误","explanation":"退休人员再任职取得的收入，应按“工资薪金所得”或“劳务报酬所得”依法计征个人所得税，仅按照国家统一规定发给的离退休费、安家费等免征。","scoring":""},{"id":"P2-judge-5","paper":2,"focus":"第三章　薪酬社保共享服务模块（薪酬核算、社保申报、公积金管理、福利发放）","type":"judge","num":5,"stem":"5．商业楼不属于个人自住住房性质，不能使用住房公积金贷款购买。（  ）","options":{},"context":[],"answer":"正确","explanation":"住房公积金贷款只能用于购买、建造、翻建、大修自住住房，商业用房不在支持范围。","scoring":""},{"id":"P2-judge-6","paper":2,"focus":"第三章　薪酬社保共享服务模块（薪酬核算、社保申报、公积金管理、福利发放）","type":"judge","num":6,"stem":"6．HRSSC 在收到薪酬数据后，应首先核查考勤人员名单、人数、假期类型与天数是否存在异常。（  ）","options":{},"context":[],"answer":"正确","explanation":"先核查后核算是薪酬差错防控的第一道关口，可有效避免漏算、重复计发等问题。","scoring":""},{"id":"P2-judge-7","paper":2,"focus":"第三章　薪酬社保共享服务模块（薪酬核算、社保申报、公积金管理、福利发放）","type":"judge","num":7,"stem":"7．企业可以将员工的工资通过法定代表人个人微信红包发放，只要金额一致即可。（  ）","options":{},"context":[],"answer":"错误","explanation":"工资应当以货币形式按月支付，通过公司对公账户或银行代发，个人账户发放不利于代扣代缴、凭证留存与劳动监察核查，存在税务与合规风险。","scoring":""},{"id":"P2-judge-8","paper":2,"focus":"第三章　薪酬社保共享服务模块（薪酬核算、社保申报、公积金管理、福利发放）","type":"judge","num":8,"stem":"8．员工上年度月平均工资高于当地上年度职工月平均工资 300% 的，社保缴费基数按 300% 封顶。（  ）","options":{},"context":[],"answer":"正确","explanation":"社保缴费基数实行“保底封顶”：低于社平工资 60% 按 60% 保底，高于 300% 按 300% 封顶。","scoring":""},{"id":"P2-judge-9","paper":2,"focus":"第三章　薪酬社保共享服务模块（薪酬核算、社保申报、公积金管理、福利发放）","type":"judge","num":9,"stem":"9．生育保险已并入职工基本医疗保险，因此女职工生育不再享受生育津贴待遇。（  ）","options":{},"context":[],"answer":"错误","explanation":"生育保险并入医保是征缴管理层面的合并，生育医疗费用与生育津贴等待遇仍依法保留并发放。","scoring":""},{"id":"P2-judge-10","paper":2,"focus":"第三章　薪酬社保共享服务模块（薪酬核算、社保申报、公积金管理、福利发放）","type":"judge","num":10,"stem":"10．薪酬核算完成后，HRSSC 应将核算结果归档保存，并在规定期限内受理员工薪酬疑问。（  ）","options":{},"context":[],"answer":"正确","explanation":"薪酬核算需形成可追溯的归档记录，并畅通员工答疑渠道，及时响应与纠错，是服务闭环的重要一环。","scoring":""},{"id":"P2-short-1","paper":2,"focus":"第三章　薪酬社保共享服务模块（薪酬核算、社保申报、公积金管理、福利发放）","type":"short","num":1,"stem":"1．简述薪酬核算与发放的完整流程。（5 分）","options":{},"context":[],"answer":"（1）数据采集：收集考勤、绩效、奖惩、异动（入转调离）、津补贴等基础数据；\n（2）数据核查：核对人员名单、人数、假期类型与天数、绩效分布是否异常；\n（3）薪酬计算：按薪酬结构核算应发项（基本工资、岗位工资、绩效、加班费等）；\n（4）扣款计算：核算社保、公积金个人部分及个人所得税；\n（5）薪酬审批：生成工资审批报表，提交直线经理或 HRBP 审核；\n（6）薪酬发放：通过银行代发，同步生成并推送工资单；\n（7）归档与答疑：归档核算底稿，受理员工疑问并纠错，形成改进记录。","explanation":"","scoring":"评分要点：七个环节答出采集、核查、计算、扣款、审批、发放、归档七项，每答对 1 项得 0.7 分，表述完整得满分。"},{"id":"P2-short-2","paper":2,"focus":"第三章　薪酬社保共享服务模块（薪酬核算、社保申报、公积金管理、福利发放）","type":"short","num":2,"stem":"2．简述社保缴费基数的确定规则。（5 分）","options":{},"context":[],"answer":"（1）一般规则：职工个人以本人上年度月平均工资作为缴费基数；\n（2）新入职职工：一般按起薪当月工资确定，次年按上年度月平均工资调整；\n（3）保底规则：本人上年度月平均工资低于当地上年度职工月平均工资 60% 的，按 60% 确定；\n（4）封顶规则：本人上年度月平均工资高于当地上年度职工月平均工资 300% 的，按 300% 确定；\n（5）年度调整：各地通常于每年 7 月进行基数申报与调整，HRSSC 须在规定期限内完成申报并与工资系统同步。","explanation":"","scoring":"评分要点：一般规则 1 分、新入职 1 分、保底 1 分、封顶 1 分、年度调整 1 分。"},{"id":"P2-short-3","paper":2,"focus":"第三章　薪酬社保共享服务模块（薪酬核算、社保申报、公积金管理、福利发放）","type":"short","num":3,"stem":"3．列举并说明薪酬核算中常见的三类差错及其排查方法。（5 分）","options":{},"context":[],"answer":"（1）加班费漏算：表现为员工实际加班但未计入加班工资。排查方法：将考勤系统的加班记录与薪酬系统的加班费项目逐人比对，核对加班类型与计发倍数（150%/200%/300%）。\n（2）扣款项错误：表现为重复扣款、错扣或应扣未扣。排查方法：核对社保公积金扣款明细、借款与赔款台账、考勤扣款规则，逐项追溯来源单据。\n（3）个税基数错误：表现为累计预扣法下专项附加扣除未及时更新、免税收入处理错误。排查方法：核对专项附加扣除采集信息、累计收入与累计扣除数据，复核税率表适用。","explanation":"","scoring":"评分要点：三类差错每类 1 分，对应排查方法每类 0.5—1 分。"},{"id":"P2-short-4","paper":2,"focus":"第三章　薪酬社保共享服务模块（薪酬核算、社保申报、公积金管理、福利发放）","type":"short","num":4,"stem":"4．简述 HRSSC 在公积金管理中的主要工作内容。（5 分）","options":{},"context":[],"answer":"（1）账户管理：办理职工公积金账户开立、封存、启封、转移与注销；\n（2）缴存管理：按月核定缴存基数与比例（5%—12% 区间），完成汇缴与补缴；\n（3）代扣代缴：每月从工资中代扣个人缴存部分并按时缴存；\n（4）提取与贷款支持：为职工提供提取条件咨询、材料清单指引与办理支持；\n（5）对账与答疑：定期对账、处理职工咨询与差错更正，配合年度基数调整。","explanation":"","scoring":"评分要点：账户、缴存、代扣代缴、提取贷款支持、对账答疑五项，每项 1 分。"},{"id":"P2-task-1","paper":2,"focus":"第三章　薪酬社保共享服务模块（薪酬核算、社保申报、公积金管理、福利发放）","type":"task","num":1,"stem":"1．【实操题 1】月度薪酬核算与差错排查（10 分）","options":{},"context":["背景：某公司实行标准 8 小时工作制。员工王某 9 月基本工资 4500 元，岗位津贴 1500 元，当月绩效奖金 2000 元，交通补贴 300 元、通讯补贴 200 元、午餐补助 500 元。9 月王某工作日加班 10 小时、休息日加班 8 小时（公司未安排补休），法定节假日加班 8 小时。公司规定以劳动合同约定的正常工作时间工资（基本工资＋岗位津贴＝6000 元）作为加班费计算基数。社保公积金个人扣款合计 1100 元，专项附加扣除等已在系统中采集。","任务：","（1）写出加班费的计算公式并计算王某 9 月应得加班费总额（日工资按 21.75 天、8 小时/天折算，结果保留整数）；（6 分）","（2）指出本次核算中需重点核查的 2 项数据风险点。（4 分）"],"answer":"（1）计算：\n小时工资＝6000 元 ÷ 21.75 天 ÷ 8 小时 ≈ 34.48 元/小时\n① 工作日加班：34.48 × 10 × 150% ≈ 517 元\n② 休息日加班（未补休）：34.48 × 8 × 200% ≈ 552 元\n③ 法定节假日加班：34.48 × 8 × 300% ≈ 828 元\n加班费合计 ≈ 517＋552＋828＝1897 元\n（2）数据风险点：\n① 加班费基数是否合规：劳动合同约定以实际工资（6000 元）为基数合法，但不得低于当地最低工资标准折算的小时工资；需确认补贴类项目是否按约定不计入基数并在合同中明示。\n② 加班时长与记录一致性：需将考勤系统加班记录（含审批单）与薪酬系统加班费项目逐条比对，防止漏算、重复计发或未经审批的加班计入。\n③ 社保公积金与个税基数是否同步调整：年度基数调整月份易出现“基数已调、抵扣未调”的错配。（答出任意 2 项即可）","explanation":"","scoring":"评分要点：小时工资折算 2 分，三类加班费计算各 1 分（共 3 分），合计 1 分；风险点每项 2 分。允许因四舍五入产生的小幅数值差异。"},{"id":"P2-task-2","paper":2,"focus":"第三章　薪酬社保共享服务模块（薪酬核算、社保申报、公积金管理、福利发放）","type":"task","num":2,"stem":"2．【实操题 2】社保增员申报操作（10 分）","options":{},"context":["背景：2026 年 10 月，公司新入职员工 5 人（3 人为首次参加工作，1 人由外省单位转入，1 人为灵活就业转单位参保），同时有 2 名员工于 10 月 15 日离职。你是 HRSSC 社保专员，请在社保申报系统中完成本月申报。","任务：","（1）列出本月社保申报需完成的 4 类操作；（4 分）","（2）针对“外省转入”与“灵活就业转单位参保”两名员工，说明需特别注意的办理要点；（4 分）","（3）指出未按期申报可能产生的 2 项后果。（2 分）"],"answer":"（1）本月 4 类操作：①新员工参保登记（增员）5 人；②离职员工停保（减员）2 人；③月度缴费申报与核对（人员、基数、金额）；④涉及转入员工的社保关系转移接续手续。\n（2）办理要点：\n① 外省转入员工：需先在原参保地办理社保关系转出并获取参保缴费凭证，再由新参保地发起转移接续申请；重点关注养老、医疗缴费年限的连续累计，避免出现断缴或重复参保；同时应核实其原单位是否已停保。\n② 灵活就业转单位参保员工：需先在灵活就业参保地办理停保（或灵活就业缴费终止），再以单位职工身份办理增员；注意清理其以个人身份缴纳的当期费用，避免同一月份重复缴费。\n（3）未按期申报的后果：①产生滞纳金并按日加收；②员工社保待遇中断（如医保报销、工伤认定受影响），引发劳动争议与投诉；③影响企业社保信用与后续业务办理。（答出任意 2 项即可）","explanation":"","scoring":"评分要点：4 类操作每项 1 分；转入与灵活就业转换要点各 2 分；后果每点 1 分。重点看流程完整性、跨地区接续意识与合规风险意识。"},{"id":"P3-single-1","paper":3,"focus":"第四章　招聘支持与数字化管理系统（eHR/OA 系统操作、数据录入、报表生成）","type":"single","num":1,"stem":"1．下列系统中，属于企业资源计划简称的是（  ）。","options":{"A":"SAP","B":"ERP","C":"OA","D":"BI"},"context":[],"answer":"B","explanation":"ERP（Enterprise Resource Planning）是企业资源计划的简称；SAP 是主流 ERP 软件供应商之一；OA 是协同办公系统；BI 是商业智能分析工具。","scoring":""},{"id":"P3-single-2","paper":3,"focus":"第四章　招聘支持与数字化管理系统（eHR/OA 系统操作、数据录入、报表生成）","type":"single","num":2,"stem":"2．eHR 系统的常见基础模块不包括（  ）。","options":{"A":"组织与人员信息","B":"考勤管理","C":"薪酬与绩效","D":"生产排程"},"context":[],"answer":"D","explanation":"eHR 通常包含组织、人员、考勤、薪酬、绩效、招聘等模块；生产排程属于 ERP/生产制造系统的功能。","scoring":""},{"id":"P3-single-3","paper":3,"focus":"第四章　招聘支持与数字化管理系统（eHR/OA 系统操作、数据录入、报表生成）","type":"single","num":3,"stem":"3．SSC 根据公司数据字典对收集表的数据情况进行核查，主要核查提供数据的（  ）。","options":{"A":"真实性与有效性","B":"真实性和可靠性","C":"完整性和准确性","D":"标准化与科学化"},"context":[],"answer":"C","explanation":"数据核查聚焦“完整性（字段无缺失）”与“准确性（数值与规则正确）”两个维度，是数据治理的第一道关口。","scoring":""},{"id":"P3-single-4","paper":3,"focus":"第四章　招聘支持与数字化管理系统（eHR/OA 系统操作、数据录入、报表生成）","type":"single","num":4,"stem":"4．在员工信息数据录入规范中，下列要求正确的是（  ）。","options":{"A":"必填项可留空，后续补录即可","B":"数据格式需符合系统校验规则（如日期、身份证号、金额）","C":"关联数据可随意填写，无需与组织架构一致","D":"为提高效率，可批量复制他人数据作为样板"},"context":[],"answer":"B","explanation":"数据录入应遵循必填项完整、数据格式合规、关联校验一致三项规范；留空、随意填写、复制他人数据均会造成数据失真。","scoring":""},{"id":"P3-single-5","paper":3,"focus":"第四章　招聘支持与数字化管理系统（eHR/OA 系统操作、数据录入、报表生成）","type":"single","num":5,"stem":"5．下列关于 HRSSC 制作报表的步骤，做法错误的是（  ）。","options":{"A":"先对需求方提交的报表需求进行分析","B":"已有模板的按模板要求完成报表制作","C":"首次制作的报表由 HRSSC 自行决定格式即可，无需与需求方确认","D":"系统可导出表格的，运用系统导出并检查数据"},"context":[],"answer":"C","explanation":"首次制作的报表必须与需求方（HRBP 或业务部门）确认口径、维度与格式，避免返工，也便于沉淀为标准模板。","scoring":""},{"id":"P3-single-6","paper":3,"focus":"第四章　招聘支持与数字化管理系统（eHR/OA 系统操作、数据录入、报表生成）","type":"single","num":6,"stem":"6．在招聘支持的三支柱分工中，主要负责面试落地实施的组织与支持工作的是（  ）。","options":{"A":"COE","B":"HRBP","C":"HRSSC","D":"用人部门负责人"},"context":[],"answer":"C","explanation":"COE 负责招聘体系与标准，HRBP 负责需求确认与甄选决策，HRSSC 负责面试组织、候选人沟通、邀约与体验管理。","scoring":""},{"id":"P3-single-7","paper":3,"focus":"第四章　招聘支持与数字化管理系统（eHR/OA 系统操作、数据录入、报表生成）","type":"single","num":7,"stem":"7．职位发布时，特别是新增职位或中高端职位需求的挖掘和校准者通常是（  ）。","options":{"A":"HRSSC","B":"HRBP","C":"COE","D":"用人部门助理"},"context":[],"answer":"C","explanation":"中高端或新增职位的需求挖掘与校准由 COE 主导，HRBP 与用人部门配合，以保证岗位价值评估与任职资格的规范性。","scoring":""},{"id":"P3-single-8","paper":3,"focus":"第四章　招聘支持与数字化管理系统（eHR/OA 系统操作、数据录入、报表生成）","type":"single","num":8,"stem":"8．可用于内部招募，也可以用于外部招募的方法是（  ）。","options":{"A":"岗位轮换","B":"档案法","C":"布告法","D":"推荐法"},"context":[],"answer":"D","explanation":"推荐法既可用于内部员工推荐外部人才（外部招募），也可用于内部岗位推荐（内部招募）；布告法、档案法主要用于内部。","scoring":""},{"id":"P3-single-9","paper":3,"focus":"第四章　招聘支持与数字化管理系统（eHR/OA 系统操作、数据录入、报表生成）","type":"single","num":9,"stem":"9．下列不属于校园招聘特点的是（  ）。","options":{"A":"招聘到的候选人缺乏丰富的工作经验","B":"花费的时间较长","C":"花费的时间较短","D":"必须提前相当长的时间进行准备工作"},"context":[],"answer":"C","explanation":"校园招聘周期长、需提前准备、候选人经验不足是其典型特点；而“花费时间较短”不符合实际。","scoring":""},{"id":"P3-single-10","paper":3,"focus":"第四章　招聘支持与数字化管理系统（eHR/OA 系统操作、数据录入、报表生成）","type":"single","num":10,"stem":"10．下列行为中，符合简历逻辑性要求的是（  ）。","options":{"A":"简历描述简洁有条理","B":"简历中个别内容自相矛盾","C":"附上 1000 字的自我评价","D":"工作经历随意排列"},"context":[],"answer":"A","explanation":"逻辑性良好的简历应简洁有条理、时间线连贯、内容前后一致；自相矛盾、冗长自评、经历乱序均属逻辑性问题。","scoring":""},{"id":"P3-single-11","paper":3,"focus":"第四章　招聘支持与数字化管理系统（eHR/OA 系统操作、数据录入、报表生成）","type":"single","num":11,"stem":"11．确定通过简历筛选的候选人后，HRSSC 可以对不同渠道筛选出来的数据进行分析，不包括（  ）。","options":{"A":"简历数量","B":"简历质量","C":"简历数量在各渠道的占比","D":"候选人父母的职业"},"context":[],"answer":"D","explanation":"渠道效果分析常用简历数量、简历质量、各渠道占比、入职人数、渠道成本等指标；候选人家庭信息不属于招聘分析范畴，且涉及隐私。","scoring":""},{"id":"P3-single-12","paper":3,"focus":"第四章　招聘支持与数字化管理系统（eHR/OA 系统操作、数据录入、报表生成）","type":"single","num":12,"stem":"12．价值观、人生观、人生态度、内在驱动等属于能力素质冰山模型的（  ）。","options":{"A":"显性素质","B":"表面素质","C":"隐性素质","D":"知识技能"},"context":[],"answer":"C","explanation":"冰山模型上层（显性）为知识与技能，下层（隐性）包括自我概念、特质、动机、价值观与人生态度等。","scoring":""},{"id":"P3-single-13","paper":3,"focus":"第四章　招聘支持与数字化管理系统（eHR/OA 系统操作、数据录入、报表生成）","type":"single","num":13,"stem":"13．既是测评工具，又兼具培训功能的评价中心技术是（  ）。","options":{"A":"案例分析","B":"公文筐处理","C":"角色扮演","D":"讲授法"},"context":[],"answer":"C","explanation":"角色扮演法兼具测评功能（观察受测者心理素质与潜在能力）与培训功能（在模拟情境中体验具体行为实践）。","scoring":""},{"id":"P3-single-14","paper":3,"focus":"第四章　招聘支持与数字化管理系统（eHR/OA 系统操作、数据录入、报表生成）","type":"single","num":14,"stem":"14．按面试途径分类，下列不属于该分类标准的是（  ）。","options":{"A":"电话面试","B":"视频面试","C":"现场面试","D":"AI 面试"},"context":[],"answer":"D","explanation":"按途径可分为电话、视频、现场面试；AI 面试是按技术手段/形式划分的类型。","scoring":""},{"id":"P3-single-15","paper":3,"focus":"第四章　招聘支持与数字化管理系统（eHR/OA 系统操作、数据录入、报表生成）","type":"single","num":15,"stem":"15．在 Offer 沟通中，最容易导致谈崩的问题一般是（  ）。","options":{"A":"公司地点","B":"工作时间","C":"加班情况","D":"薪资待遇"},"context":[],"answer":"D","explanation":"薪资是 Offer 沟通中最敏感、最容易产生分歧的要素，需在前期充分校准候选人预期与薪酬带宽。","scoring":""},{"id":"P3-single-16","paper":3,"focus":"第四章　招聘支持与数字化管理系统（eHR/OA 系统操作、数据录入、报表生成）","type":"single","num":16,"stem":"16．对于仍在原单位就职的候选人，HRSSC 在背景调查中最应关注其（  ）。","options":{"A":"辞职情况","B":"家庭情况","C":"经济情况","D":"兴趣爱好"},"context":[],"answer":"A","explanation":"重点核实候选人是否已提出离职、离职时间是否明确、是否存在竞业限制，以规避双重雇佣与法律风险。","scoring":""},{"id":"P3-single-17","paper":3,"focus":"第四章　招聘支持与数字化管理系统（eHR/OA 系统操作、数据录入、报表生成）","type":"single","num":17,"stem":"17．开展背景调查前，HRSSC 必须首先（  ）。","options":{"A":"直接联系候选人原单位人事部门","B":"取得候选人的书面授权","C":"在社交平台搜索候选人信息","D":"由用人部门自行调查"},"context":[],"answer":"B","explanation":"《个人信息保护法》要求处理个人信息须取得个人同意，背景调查涉及敏感个人信息，必须先取得候选人书面授权，并限于与岗位相关的必要范围。","scoring":""},{"id":"P3-single-18","paper":3,"focus":"第四章　招聘支持与数字化管理系统（eHR/OA 系统操作、数据录入、报表生成）","type":"single","num":18,"stem":"18．《中华人民共和国个人信息保护法》正式施行的时间是（  ）。","options":{"A":"2019 年 1 月 1 日","B":"2020 年 7 月 1 日","C":"2021 年 11 月 1 日","D":"2023 年 1 月 1 日"},"context":[],"answer":"C","explanation":"《中华人民共和国个人信息保护法》自 2021 年 11 月 1 日起施行，是 HRSSC 处理员工个人信息的基本法律依据。","scoring":""},{"id":"P3-single-19","paper":3,"focus":"第四章　招聘支持与数字化管理系统（eHR/OA 系统操作、数据录入、报表生成）","type":"single","num":19,"stem":"19．下列人工智能在招聘环节的应用中，不涉及个人信息合规风险的是（  ）。","options":{"A":"自动搜索并筛选符合要求的简历","B":"自动提取求职者姓名、联系方式等关键信息","C":"整理形成结构化候选人表格","D":"未经授权爬取并留存求职者社交数据"},"context":[],"answer":"C","explanation":"整理形成结构化表格属于数据处理环节，若数据来源于合法授权渠道则风险可控；未经授权爬取、留存社交数据违反最小必要与知情同意原则。","scoring":""},{"id":"P3-single-20","paper":3,"focus":"第四章　招聘支持与数字化管理系统（eHR/OA 系统操作、数据录入、报表生成）","type":"single","num":20,"stem":"20．下列 BI 可视化图表中，最适合展示招聘各阶段转化情况的是（  ）。","options":{"A":"招聘漏斗图","B":"薪酬分布直方图","C":"员工司龄饼图","D":"部门人数柱状图"},"context":[],"answer":"A","explanation":"招聘漏斗图直观呈现“投递—初筛—笔试—面试—Offer—入职”各环节的转化率，是招聘效果分析的核心图表。","scoring":""},{"id":"P3-multi-1","paper":3,"focus":"第四章　招聘支持与数字化管理系统（eHR/OA 系统操作、数据录入、报表生成）","type":"multi","num":1,"stem":"1．人工智能已广泛应用于招聘环节，其可以实现的功能有（  ）。","options":{"A":"自动登录各招聘网站","B":"自动搜索和筛选符合要求的求职者简历","C":"自动下载求职者简历","D":"自动提取姓名、联系方式等关键信息并整理成表格"},"context":[],"answer":"ABCD","explanation":"AI 招聘工具可实现自动登录、搜索筛选、下载、关键信息提取与结构化整理，大幅提升简历处理效率。","scoring":""},{"id":"P3-multi-2","paper":3,"focus":"第四章　招聘支持与数字化管理系统（eHR/OA 系统操作、数据录入、报表生成）","type":"multi","num":2,"stem":"2．确定通过简历筛选的候选人后，HRSSC 可对不同渠道的哪些数据进行分析？（  ）","options":{"A":"简历数量","B":"简历质量","C":"简历数量在各渠道的占比","D":"入职人数"},"context":[],"answer":"ABCD","explanation":"渠道效果分析从数量、质量、结构占比与最终入职转化四个维度展开，用于优化渠道组合与预算分配。","scoring":""},{"id":"P3-multi-3","paper":3,"focus":"第四章　招聘支持与数字化管理系统（eHR/OA 系统操作、数据录入、报表生成）","type":"multi","num":3,"stem":"3．下列属于业务部门提交的招聘需求信息的有（  ）。","options":{"A":"职位本身的职责和任职要求","B":"需求职位所属团队的风格与特点","C":"企业文化与价值观要求","D":"候选人的家庭财产状况"},"context":[],"answer":"ABC","explanation":"招聘需求应聚焦岗位任职要求与团队适配性；候选人家庭财产状况与岗位无关，且不应收集。","scoring":""},{"id":"P3-multi-4","paper":3,"focus":"第四章　招聘支持与数字化管理系统（eHR/OA 系统操作、数据录入、报表生成）","type":"multi","num":4,"stem":"4．下列说法适用于猎头公司招聘人才的有（  ）。","options":{"A":"猎头公司为适应单位对高层次人才的需求与高级人才的求职要求而发展起来","B":"猎头公司适用于为组织招聘高级和尖端人才","C":"猎头公司挖掘的候选人往往主动求职的愿望相对较低","D":"猎头公司的服务费用相对较高"},"context":[],"answer":"ABCD","explanation":"四项均准确描述了猎头招聘的定位、适用对象、候选人特征与成本特征。","scoring":""},{"id":"P3-multi-5","paper":3,"focus":"第四章　招聘支持与数字化管理系统（eHR/OA 系统操作、数据录入、报表生成）","type":"multi","num":5,"stem":"5．笔试测评的内容一般包括（  ）。","options":{"A":"一般知识","B":"专业知识","C":"岗位相关知识","D":"性格与智商"},"context":[],"answer":"ABCD","explanation":"笔试测评涵盖通用知识、专业知识、岗位相关知识，并可延伸至性格与能力倾向测试。","scoring":""},{"id":"P3-multi-6","paper":3,"focus":"第四章　招聘支持与数字化管理系统（eHR/OA 系统操作、数据录入、报表生成）","type":"multi","num":6,"stem":"6．HRSSC 常用的 BI 数据可视化分析场景包括（  ）。","options":{"A":"员工结构与司龄分布","B":"招聘漏斗与渠道转化","C":"薪酬分布与人工成本占比","D":"入离职趋势与流失预警"},"context":[],"answer":"ABCD","explanation":"BI 工具可支撑人员结构、招聘效能、薪酬成本、流失趋势等多维度可视化分析，为 HRBP 与决策层提供依据。","scoring":""},{"id":"P3-multi-7","paper":3,"focus":"第四章　招聘支持与数字化管理系统（eHR/OA 系统操作、数据录入、报表生成）","type":"multi","num":7,"stem":"7．eHR 系统中员工数据录入的规范要求包括（  ）。","options":{"A":"必填字段不得留空","B":"数据格式符合系统校验规则","C":"关联数据（部门、岗位、汇报关系）保持一致","D":"数据变更须留痕可追溯"},"context":[],"answer":"ABCD","explanation":"数据录入应做到必填完整、格式合规、关联一致、变更留痕，确保主数据的准确性与可追溯性。","scoring":""},{"id":"P3-multi-8","paper":3,"focus":"第四章　招聘支持与数字化管理系统（eHR/OA 系统操作、数据录入、报表生成）","type":"multi","num":8,"stem":"8．下列做法符合员工个人信息保护要求的有（  ）。","options":{"A":"按岗位职责实行系统权限分级授权","B":"处理员工敏感个人信息前取得单独同意","C":"将候选人简历长期留存于个人电脑桌面","D":"数据导出后加密存储并限期销毁"},"context":[],"answer":"ABD","explanation":"权限分级、知情同意、最小必要、加密存储与限期销毁均为合规要求；简历随意留存于个人终端属违规行为。","scoring":""},{"id":"P3-multi-9","paper":3,"focus":"第四章　招聘支持与数字化管理系统（eHR/OA 系统操作、数据录入、报表生成）","type":"multi","num":9,"stem":"9．HRSSC 在招聘支持环节的主要工作包括（  ）。","options":{"A":"职位发布与渠道维护","B":"简历筛选与人才测评组织","C":"面试安排与候选人沟通","D":"背景调查支持与录用手续办理"},"context":[],"answer":"ABCD","explanation":"HRSSC 承担招聘流程中标准化、事务性的支持工作，覆盖从职位发布到录用手续的全流程。","scoring":""},{"id":"P3-multi-10","paper":3,"focus":"第四章　招聘支持与数字化管理系统（eHR/OA 系统操作、数据录入、报表生成）","type":"multi","num":10,"stem":"10．OA 协同办公系统在 HRSSC 中的典型应用场景有（  ）。","options":{"A":"入转调离审批流程配置与流转","B":"公文与通知发布","C":"跨部门会签与工单流转","D":"生产设备的运行控制"},"context":[],"answer":"ABC","explanation":"OA 主要用于审批流程、公文流转与跨部门协同；生产设备控制属于工业控制系统范畴。","scoring":""},{"id":"P3-judge-1","paper":3,"focus":"第四章　招聘支持与数字化管理系统（eHR/OA 系统操作、数据录入、报表生成）","type":"judge","num":1,"stem":"1．HRSSC 制作报表时，若该报表为第一次制作，可自行决定报表格式，无需与 HRBP 或需求方确认。（  ）","options":{},"context":[],"answer":"错误","explanation":"首次制作必须与需求方确认口径、维度与格式，并沉淀为模板，否则易返工且难以复用。","scoring":""},{"id":"P3-judge-2","paper":3,"focus":"第四章　招聘支持与数字化管理系统（eHR/OA 系统操作、数据录入、报表生成）","type":"judge","num":2,"stem":"2．数据核查主要关注数据的完整性与准确性，而非数据是否“好看”。（  ）","options":{},"context":[],"answer":"正确","explanation":"数据核查的核心是保证字段完整、数值准确、口径一致，服务于后续分析与决策的可靠性。","scoring":""},{"id":"P3-judge-3","paper":3,"focus":"第四章　招聘支持与数字化管理系统（eHR/OA 系统操作、数据录入、报表生成）","type":"judge","num":3,"stem":"3．为提高效率，HRSSC 可以将一个员工的 eHR 信息复制给另一名员工作为模板，再修改个别字段。（  ）","options":{},"context":[],"answer":"错误","explanation":"复制他人数据易造成主数据污染（身份证号、银行卡、入职日期等关键字段错误），应逐人据实录入。","scoring":""},{"id":"P3-judge-4","paper":3,"focus":"第四章　招聘支持与数字化管理系统（eHR/OA 系统操作、数据录入、报表生成）","type":"judge","num":4,"stem":"4．人才测评不是招聘的决定性因素，而是一个辅助工具。应用人才测评辅助招聘选拔的起点是明确职位的要求。（  ）","options":{},"context":[],"answer":"正确","explanation":"人才测评用于辅助判断，不能替代面试与综合决策；必须先明确岗位要求，才能选择匹配的测评工具与常模。","scoring":""},{"id":"P3-judge-5","paper":3,"focus":"第四章　招聘支持与数字化管理系统（eHR/OA 系统操作、数据录入、报表生成）","type":"judge","num":5,"stem":"5．有些求职者的简历短期内工作内容涉及范围较广、也较有深度，说明该求职者领悟力很强，一定要录用。（  ）","options":{},"context":[],"answer":"错误","explanation":"短期内经历过多岗位往往提示稳定性风险，需结合面试与背景调查综合判断，不能据此直接录用。","scoring":""},{"id":"P3-judge-6","paper":3,"focus":"第四章　招聘支持与数字化管理系统（eHR/OA 系统操作、数据录入、报表生成）","type":"judge","num":6,"stem":"6．开展背景调查时，只要能核实信息，可以不经候选人授权直接向其原单位核实。（  ）","options":{},"context":[],"answer":"错误","explanation":"背景调查涉及个人信息处理，必须事先取得候选人书面授权，且调查范围应与岗位相关并遵循最小必要原则。","scoring":""},{"id":"P3-judge-7","paper":3,"focus":"第四章　招聘支持与数字化管理系统（eHR/OA 系统操作、数据录入、报表生成）","type":"judge","num":7,"stem":"7．招聘渠道效果分析只需看收到的简历数量，数量越多说明渠道越好。（  ）","options":{},"context":[],"answer":"错误","explanation":"应综合简历数量、简历质量、各渠道占比与最终入职人数（转化率）进行判断，仅看数量易误导渠道决策。","scoring":""},{"id":"P3-judge-8","paper":3,"focus":"第四章　招聘支持与数字化管理系统（eHR/OA 系统操作、数据录入、报表生成）","type":"judge","num":8,"stem":"8．eHR 系统中，员工离职后其账号权限应及时关闭或冻结。（  ）","options":{},"context":[],"answer":"正确","explanation":"离职即关闭账号与权限是权限分级管理与数据安全防控的基本要求，可有效防止数据泄露。","scoring":""},{"id":"P3-judge-9","paper":3,"focus":"第四章　招聘支持与数字化管理系统（eHR/OA 系统操作、数据录入、报表生成）","type":"judge","num":9,"stem":"9．AI 面试可以完全替代人工面试，独立作出录用决策。（  ）","options":{},"context":[],"answer":"错误","explanation":"AI 面试可作为初筛与结构化评估的辅助手段，但录用决策涉及综合判断与法律责任，应由用人部门与 HR 共同完成。","scoring":""},{"id":"P3-judge-10","paper":3,"focus":"第四章　招聘支持与数字化管理系统（eHR/OA 系统操作、数据录入、报表生成）","type":"judge","num":10,"stem":"10．HRSSC 在招聘环节应高度关注候选人体验，及时反馈面试结果与进展。（  ）","options":{},"context":[],"answer":"正确","explanation":"候选人体验是雇主品牌的重要组成部分，及时反馈有助于提升入职转化率与企业口碑。","scoring":""},{"id":"P3-short-1","paper":3,"focus":"第四章　招聘支持与数字化管理系统（eHR/OA 系统操作、数据录入、报表生成）","type":"short","num":1,"stem":"1．简述 eHR 系统中员工信息数据录入的三项基本规范及意义。（5 分）","options":{},"context":[],"answer":"（1）必填项完整：姓名、证件号、入职日期、部门、岗位、薪酬标准等关键字段不得缺失；\n（2）格式合规：日期、身份证号、银行卡号、金额等字段须符合系统校验规则，避免格式错误导致下游计算失败；\n（3）关联一致：部门、岗位、汇报关系、考勤规则、薪酬档案之间保持一致，避免数据孤岛与口径冲突；\n补充：数据变更须留痕可追溯。\n意义：主数据质量直接决定薪酬核算、社保申报、报表分析的准确性，是 HRSSC 数字化运营的“地基”，一旦污染将引发连锁差错与合规风险。","explanation":"","scoring":"评分要点：三项规范各 1 分，留痕 1 分，意义说明 1 分。"},{"id":"P3-short-2","paper":3,"focus":"第四章　招聘支持与数字化管理系统（eHR/OA 系统操作、数据录入、报表生成）","type":"short","num":2,"stem":"2．简述招聘支持业务流程的主要环节。（5 分）","options":{},"context":[],"answer":"（1）需求确认：COE 挖掘与校准职位需求，HRBP 与用人部门确认任职资格与到岗时间；\n（2）职位发布与渠道选择：在招聘网站、内部推荐、校园招聘、猎头等渠道发布；\n（3）简历收集与筛选：AI 初筛＋人工复核，关注简历逻辑性与岗位匹配度；\n（4）人才测评与笔试：按岗位要求组织测评与笔试；\n（5）面试安排：HRSSC 组织面试、协调面试官、反馈进展；\n（6）背景调查：取得授权后核实履历、离职状态与竞业限制；\n（7）Offer 沟通与审批：校准薪资预期，完成 Offer 审批；\n（8）入职办理：转入员工人事模块，完成入职手续与系统建档。","explanation":"","scoring":"评分要点：需求、发布、筛选、测评、面试、背调、Offer、入职八项，答出 6 项以上得满分。"},{"id":"P3-short-3","paper":3,"focus":"第四章　招聘支持与数字化管理系统（eHR/OA 系统操作、数据录入、报表生成）","type":"short","num":3,"stem":"3．简述数据核查的主要内容与常用方法。（5 分）","options":{},"context":[],"answer":"（1）完整性核查：检查必填字段是否齐全、人员名单是否覆盖全部在册员工；\n（2）准确性核查：核对数值是否与源系统一致（如考勤天数、绩效等级、薪酬项目）；\n（3）一致性核查：比对跨系统数据（eHR↔OA↔财务）是否一致，部门、岗位、汇报关系是否匹配；\n（4）合规性核查：检查数据采集合法性（是否取得授权）、敏感字段是否脱敏、权限是否分级；\n常用方法：系统内置校验规则与数据字典比对、跨系统对账、抽样复核、异常值预警报表。","explanation":"","scoring":"评分要点：四类核查内容各 1 分，方法 1 分。"},{"id":"P3-short-4","paper":3,"focus":"第四章　招聘支持与数字化管理系统（eHR/OA 系统操作、数据录入、报表生成）","type":"short","num":4,"stem":"4．简述 HRSSC 运用 BI 工具进行招聘数据分析的主要指标及其管理价值。（5 分）","options":{},"context":[],"answer":"主要指标：\n（1）招聘漏斗各环节转化率（投递→初筛→笔试→面试→Offer→入职）；\n（2）各渠道简历数量、质量与入职人数占比；\n（3）平均招聘周期与到岗及时率；\n（4）单位招聘成本与 Offer 接受率；\n（5）试用期留存率与新员工离职率。\n管理价值：识别招聘瓶颈环节、优化渠道组合与预算投放、缩短招聘周期、提升人才质量，并将分析结果反馈给 HRBP 与 COE，支撑招聘策略调整与用工计划制定。","explanation":"","scoring":"评分要点：指标每答出 1 项得 0.5 分（共 2.5 分），管理价值说明 2.5 分（识别瓶颈、优化渠道、支撑决策各层次）。"},{"id":"P3-task-1","paper":3,"focus":"第四章　招聘支持与数字化管理系统（eHR/OA 系统操作、数据录入、报表生成）","type":"task","num":1,"stem":"1．【实操题 1】招聘支持全流程操作（10 分）","options":{},"context":["背景：C 公司启动 2027 届校园招聘，计划招聘软件开发工程师 20 人。你是 HRSSC 招聘支持专员，负责本次校招的组织与落地支持。","任务：","（1）列出本次校园招聘从需求确认到录用手续的完整流程环节；（5 分）","（2）说明 HRSSC 在其中承担的 4 项具体工作；（4 分）","（3）指出校园招聘中需重点关注的 1 项合规要点。（1 分）"],"answer":"（1）流程环节：①需求确认与职位校准（COE＋HRBP＋用人部门）；②制定宣讲与招聘方案；③与目标院校联系并确定宣讲时间；④宣传预热与物料准备；⑤宣讲会组织实施；⑥简历收集与筛选；⑦笔试与人才测评；⑧面试组织与实施；⑨背景调查（核实学历、学籍、竞业限制）；⑩Offer 沟通与审批；⑪三方协议签署与实习安排；⑫入职手续办理与系统建档。\n（2）HRSSC 承担的 4 项工作：①发布职位、维护招聘渠道并汇总简历；②组织笔试、测评与面试排期，协调面试官并反馈进展；③开展背景调查（学历学籍核验、授权与范围把控）；④办理 Offer 审批、三方协议与后续入职建档，并输出招聘数据报表。\n（3）合规要点：开展背景调查与学籍核验必须事先取得候选人书面授权，且信息收集限于与岗位相关的必要范围；同时招聘信息不得含就业歧视内容（性别、地域、院校等），遵守《就业促进法》与《个人信息保护法》。（答出 1 项即可）","explanation":"","scoring":"评分要点：流程 12 个环节答出 6 个以上得 5 分；4 项工作每项 1 分；合规要点 1 分。重点考查流程完整性与合规意识。"},{"id":"P3-task-2","paper":3,"focus":"第四章　招聘支持与数字化管理系统（eHR/OA 系统操作、数据录入、报表生成）","type":"task","num":2,"stem":"2．【实操题 2】HR 数据报表生成与可视化（10 分）","options":{},"context":["背景：HRBP 向 HRSSC 提出需求：“请提供近 6 个月各部门的入职人数、离职人数与月末在职人数，并分析人员流失情况。”这是该报表首次制作。","任务：","（1）写出你接到需求后的处理步骤；（5 分）","（2）列出该报表应包含的字段与建议的可视化图表类型；（3 分）","（3）说明数据核查中需重点确认的 2 项内容。（2 分）"],"answer":"（1）处理步骤：①需求分析——与 HRBP 确认口径（在职/离职的定义、统计月份、是否含实习生、部门口径）与交付时间；②确认格式——因首次制作，须与 HRBP 确认维度、字段与模板，并沉淀为标准模板；③数据提取——从 eHR 系统按口径导出入职、离职、在职数据；④数据核查——核对人员名单、人数、异动日期与部门归属；⑤报表制作——按模板汇总，运用 BI 工具生成图表；⑥复核交付——自检数据逻辑（月末在职＝月初在职＋入职－离职）无误后提交，并留存版本。\n（2）字段：月份、部门、期初在职人数、入职人数、离职人数、期末在职人数、月度离职率。\n图表建议：①各部门期末在职人数对比——柱状图；②近 6 个月入职/离职人数趋势——折线图或组合图；③离职率按部门对比——柱状图或热力图；④人员流动结构——堆积柱状图。\n（3）重点核查：①口径一致性——离职日期与统计月份归属是否一致，跨月异动是否重复统计；②勾稽关系——期末在职＝期初在职＋入职－离职，逐部门验证；③异常值——是否存在部门归属为空、重复人员、实习生混入等情况。（答出任意 2 项即可）","explanation":"","scoring":"评分要点：处理步骤 5 分（需求分析、确认格式、提取、核查、制作、复核各约 1 分）；字段 1.5 分、图表 1.5 分；核查要点每点 1 分。"},{"id":"P4-single-1","paper":4,"focus":"第五章　培训实施支持与供应商管理（流程优化方法、培训支持、供应商管理、成本控制与服务质效）","type":"single","num":1,"stem":"1．在培训的基本概念中，培训的最终目的是（  ）。","options":{"A":"改善员工绩效","B":"提升企业绩效","C":"系统传授知识","D":"系统训练技能"},"context":[],"answer":"B","explanation":"培训的最终目的是提升企业自身的竞争力与组织绩效；改善员工绩效是中间目标，传授知识与训练技能是手段。","scoring":""},{"id":"P4-single-2","paper":4,"focus":"第五章　培训实施支持与供应商管理（流程优化方法、培训支持、供应商管理、成本控制与服务质效）","type":"single","num":2,"stem":"2．在培训效果的层级体系（柯氏四级评估）中，“结果评估”的评估内容是（  ）。","options":{"A":"受训者在工作过程中行为方式的变化和改进","B":"受训者取得的生产经营或技术管理方面的业绩","C":"受训者在技能、态度、行为方式等方面的收获","D":"受训者对培训项目的主观感觉或满意程度"},"context":[],"answer":"B","explanation":"柯氏四层依次为：反应层（满意度）、学习层（知识技能收获）、行为层（工作行为改变）、结果层（经营业绩）。","scoring":""},{"id":"P4-single-3","paper":4,"focus":"第五章　培训实施支持与供应商管理（流程优化方法、培训支持、供应商管理、成本控制与服务质效）","type":"single","num":3,"stem":"3．下列属于线下培训优势的是（  ）。","options":{"A":"集中学习时学员可避免外界打扰，精力更集中","B":"没有场地和时间限制，学习更自由","C":"组织实施更便捷、快速","D":"学员可自行安排学习进度"},"context":[],"answer":"A","explanation":"B、C、D 均为线上培训的特点；线下培训的优势在于沉浸式、互动性强、学习专注度高。","scoring":""},{"id":"P4-single-4","paper":4,"focus":"第五章　培训实施支持与供应商管理（流程优化方法、培训支持、供应商管理、成本控制与服务质效）","type":"single","num":4,"stem":"4．HRSSC 撰写培训调研分析结果报告时，下列做法错误的是（  ）。","options":{"A":"必须对全体受训人员进行调查","B":"尽量实事求是地呈现评估结果","C":"附录中收集培训过程中所使用的原始资料","D":"报告内容一般包括调研目的、调研范围、调研结果、优化改进建议"},"context":[],"answer":"A","explanation":"评估调查应选取具有代表性的样本，而非强制全体受训人员参加，否则成本高且易产生应付式反馈。","scoring":""},{"id":"P4-single-5","paper":4,"focus":"第五章　培训实施支持与供应商管理（流程优化方法、培训支持、供应商管理、成本控制与服务质效）","type":"single","num":5,"stem":"5．在培训方法中，讲授法的局限性不包括（  ）。","options":{"A":"不能满足学员的个性需求","B":"传授方式较为枯燥单一","C":"内容不具备较好的系统性","D":"教师水平直接影响培训效果"},"context":[],"answer":"C","explanation":"讲授法的优点是系统性强、覆盖面广、成本低；其局限在于单向灌输、难以满足个性化需求、效果高度依赖讲师水平。","scoring":""},{"id":"P4-single-6","paper":4,"focus":"第五章　培训实施支持与供应商管理（流程优化方法、培训支持、供应商管理、成本控制与服务质效）","type":"single","num":6,"stem":"6．下列因素中，不属于影响课堂培训效果主要因素的是（  ）。","options":{"A":"教师的教学水平","B":"课堂教学方法","C":"课堂时间的长短","D":"培训内容"},"context":[],"answer":"C","explanation":"影响课堂培训效果的核心是讲师水平、教学方法与培训内容；课堂时间长短本身不是效果的主要决定因素。","scoring":""},{"id":"P4-single-7","paper":4,"focus":"第五章　培训实施支持与供应商管理（流程优化方法、培训支持、供应商管理、成本控制与服务质效）","type":"single","num":7,"stem":"7．决定企业人力资源培训与技能开发成败的关键因素是（  ）。","options":{"A":"培训规划的准确性","B":"培训规划的实用性","C":"培训规划的可行性","D":"培训教室的装修档次"},"context":[],"answer":"D","explanation":"培训规划的准确性、实用性与可行性共同决定培训成败；教室装修档次与培训效果无直接必然联系。","scoring":""},{"id":"P4-single-8","paper":4,"focus":"第五章　培训实施支持与供应商管理（流程优化方法、培训支持、供应商管理、成本控制与服务质效）","type":"single","num":8,"stem":"8．在 HRSSC 给供应商下单的过程中，下列做法不正确的是（  ）。","options":{"A":"印刷源文件应仔细检查，避免成品出错","B":"书面明确本次服务要求","C":"过程中不需要和供应商保持沟通，其自行按要求执行即可","D":"交付期限如有可能尽量提前"},"context":[],"answer":"C","explanation":"下单后应持续与供应商保持沟通，跟踪进度与质量，及时纠偏，避免交付延期或质量不达标。","scoring":""},{"id":"P4-single-9","paper":4,"focus":"第五章　培训实施支持与供应商管理（流程优化方法、培训支持、供应商管理、成本控制与服务质效）","type":"single","num":9,"stem":"9．供应商服务流程中，企业将款项全部支付给供应商之后，最后要做的环节是（  ）。","options":{"A":"给供应商下单","B":"检查供应商交付的物品","C":"服务评价及优化改进","D":"更换供应商"},"context":[],"answer":"C","explanation":"供应商服务流程为：选择供应商→给供应商下单→检查交付物品→付款→服务评价与优化改进，形成闭环。","scoring":""},{"id":"P4-single-10","paper":4,"focus":"第五章　培训实施支持与供应商管理（流程优化方法、培训支持、供应商管理、成本控制与服务质效）","type":"single","num":10,"stem":"10．下列不属于培训供应商常见评估维度的是（  ）。","options":{"A":"资质与信誉","B":"价格与成本","C":"师资与课程案例","D":"供应商法定代表人的家庭情况"},"context":[],"answer":"D","explanation":"供应商评估通常围绕资质、价格、师资、案例、服务五个维度展开；法定代表人家庭情况与履约能力无关，且不应采集。","scoring":""},{"id":"P4-single-11","paper":4,"focus":"第五章　培训实施支持与供应商管理（流程优化方法、培训支持、供应商管理、成本控制与服务质效）","type":"single","num":11,"stem":"11．流程优化方法 ESIA 中，“整合（Integrate）”的含义是（  ）。","options":{"A":"删除非增值环节","B":"简化过度复杂的流程","C":"将分散的流程进行合并重组","D":"用系统替代重复性人工劳动"},"context":[],"answer":"C","explanation":"ESIA 四步：E 清除（删除非增值）、S 简化（简化复杂环节）、I 整合（合并分散流程）、A 自动化（系统替代重复劳动）。","scoring":""},{"id":"P4-single-12","paper":4,"focus":"第五章　培训实施支持与供应商管理（流程优化方法、培训支持、供应商管理、成本控制与服务质效）","type":"single","num":12,"stem":"12．PDCA 循环中，字母 C 代表的环节是（  ）。","options":{"A":"计划（Plan）","B":"执行（Do）","C":"检查（Check）","D":"处理（Act）"},"context":[],"answer":"C","explanation":"PDCA 即 Plan（计划）—Do（执行）—Check（检查）—Act（处理），是持续改进的经典闭环。","scoring":""},{"id":"P4-single-13","paper":4,"focus":"第五章　培训实施支持与供应商管理（流程优化方法、培训支持、供应商管理、成本控制与服务质效）","type":"single","num":13,"stem":"13．SIPOC 模型中，字母 O 代表的是（  ）。","options":{"A":"供应商（Supplier）","B":"输入（Input）","C":"流程（Process）","D":"输出（Output）"},"context":[],"answer":"D","explanation":"SIPOC 即 Supplier（供应商）—Input（输入）—Process（流程）—Output（输出）—Customer（客户），用于界定流程边界。","scoring":""},{"id":"P4-single-14","paper":4,"focus":"第五章　培训实施支持与供应商管理（流程优化方法、培训支持、供应商管理、成本控制与服务质效）","type":"single","num":14,"stem":"14．鱼骨图（因果图）常用的 6M 分析法中，不包括下列哪一项（  ）。","options":{"A":"人（Man）","B":"机（Machine）","C":"料（Material）","D":"市场（Market）"},"context":[],"answer":"D","explanation":"6M 包括人（Man）、机（Machine）、料（Material）、法（Method）、环（Environment）、测（Measurement）；市场不属于 6M。","scoring":""},{"id":"P4-single-15","paper":4,"focus":"第五章　培训实施支持与供应商管理（流程优化方法、培训支持、供应商管理、成本控制与服务质效）","type":"single","num":15,"stem":"15．5 Why 分析法的核心目的是（  ）。","options":{"A":"快速找到责任人并追责","B":"通过连续追问找到问题的根本原因","C":"统计问题发生的频次","D":"比较不同部门的绩效"},"context":[],"answer":"B","explanation":"5 Why 通过连续追问“为什么”层层深入，直至找到可控的根本原因（Root Cause），而非追责或统计。","scoring":""},{"id":"P4-single-16","paper":4,"focus":"第五章　培训实施支持与供应商管理（流程优化方法、培训支持、供应商管理、成本控制与服务质效）","type":"single","num":16,"stem":"16．下列不属于 HRSSC 服务质效核心指标的是（  ）。","options":{"A":"响应时效","B":"一次解决率","C":"员工满意度","D":"员工出勤天数"},"context":[],"answer":"D","explanation":"响应时效、一次解决率、员工满意度构成 HRSSC 服务质效的三大核心指标；员工出勤天数属于考勤数据。","scoring":""},{"id":"P4-single-17","paper":4,"focus":"第五章　培训实施支持与供应商管理（流程优化方法、培训支持、供应商管理、成本控制与服务质效）","type":"single","num":17,"stem":"17．培训需求分析通常不包括的层次是（  ）。","options":{"A":"组织层面分析","B":"任务（岗位）层面分析","C":"人员层面分析","D":"竞争对手股东结构分析"},"context":[],"answer":"D","explanation":"培训需求分析经典三层次为组织分析、任务（岗位）分析、人员分析；竞争对手股东结构与培训需求无关。","scoring":""},{"id":"P4-single-18","paper":4,"focus":"第五章　培训实施支持与供应商管理（流程优化方法、培训支持、供应商管理、成本控制与服务质效）","type":"single","num":18,"stem":"18．在培训实施支持中，HRSSC 的主要职责是（  ）。","options":{"A":"制定公司年度培训战略与预算","B":"识别业务部门的个性化能力短板并设计方案","C":"承担培训组织、通知、场地、签到、物料与档案等事务性支持","D":"决定培训讲师的聘任与解聘"},"context":[],"answer":"C","explanation":"COE 负责培训体系与战略，HRBP 负责业务侧需求诊断与方案落地，HRSSC 承担标准化、事务性的培训组织支持与档案管理工作。","scoring":""},{"id":"P4-single-19","paper":4,"focus":"第五章　培训实施支持与供应商管理（流程优化方法、培训支持、供应商管理、成本控制与服务质效）","type":"single","num":19,"stem":"19．HRSSC 开展供应商管理的主要目的不包括（  ）。","options":{"A":"保障培训与服务的交付质量","B":"控制采购与运营成本","C":"降低履约风险、实现优胜劣汰","D":"完全取消内部 HR 团队"},"context":[],"answer":"D","explanation":"供应商管理旨在保质、控本、控风险并建立长期合作关系，并非取代内部 HR 团队。","scoring":""},{"id":"P4-single-20","paper":4,"focus":"第五章　培训实施支持与供应商管理（流程优化方法、培训支持、供应商管理、成本控制与服务质效）","type":"single","num":20,"stem":"20．在成本控制方面，下列做法正确的是（  ）。","options":{"A":"一味压低供应商价格，忽视交付质量","B":"建立成本台账，按课程/项目核算投入产出","C":"所有培训一律选择最贵的供应商","D":"取消培训预算以节约成本"},"context":[],"answer":"B","explanation":"成本控制应基于成本台账与投入产出分析，在保证质量前提下优化采购策略，而非单纯压价或削减预算。","scoring":""},{"id":"P4-multi-1","paper":4,"focus":"第五章　培训实施支持与供应商管理（流程优化方法、培训支持、供应商管理、成本控制与服务质效）","type":"multi","num":1,"stem":"1．培训调研分析结果报告一般包括的内容有（  ）。","options":{"A":"调研目的","B":"调研范围","C":"调研结果","D":"优化改进建议"},"context":[],"answer":"ABCD","explanation":"完整的调研分析报告应包含目的、范围、结果与改进建议四部分，并可在附录中附上原始资料。","scoring":""},{"id":"P4-multi-2","paper":4,"focus":"第五章　培训实施支持与供应商管理（流程优化方法、培训支持、供应商管理、成本控制与服务质效）","type":"multi","num":2,"stem":"2．影响课堂培训效果的主要因素有（  ）。","options":{"A":"教师的教学水平","B":"课堂教学方法","C":"课堂时间的长短","D":"培训内容"},"context":[],"answer":"ABD","explanation":"讲师水平、教学方法与培训内容是影响效果的核心因素，课堂时间长短不是主要因素。","scoring":""},{"id":"P4-multi-3","paper":4,"focus":"第五章　培训实施支持与供应商管理（流程优化方法、培训支持、供应商管理、成本控制与服务质效）","type":"multi","num":3,"stem":"3．讲授法的局限性在于（  ）。","options":{"A":"不能满足学员的个性需求","B":"传授方式较为枯燥单一","C":"内容不具备较好的系统性","D":"教师水平直接影响培训效果"},"context":[],"answer":"ABD","explanation":"讲授法系统性强是其优点，故 C 不选；单向灌输、枯燥、依赖讲师水平为其主要局限。","scoring":""},{"id":"P4-multi-4","paper":4,"focus":"第五章　培训实施支持与供应商管理（流程优化方法、培训支持、供应商管理、成本控制与服务质效）","type":"multi","num":4,"stem":"4．课程内容供应商负责按企业的哪些要求完成课程制作？（  ）","options":{"A":"课程目标","B":"课程大纲","C":"使用时间","D":"价格预算"},"context":[],"answer":"ABCD","explanation":"供应商须在课程目标、大纲、交付时间与价格预算四项约束下完成课程制作与交付。","scoring":""},{"id":"P4-multi-5","paper":4,"focus":"第五章　培训实施支持与供应商管理（流程优化方法、培训支持、供应商管理、成本控制与服务质效）","type":"multi","num":5,"stem":"5．在交付能力方面，评估供应商时需确认（  ）。","options":{"A":"是否拥有足够的生产能力","B":"人力资源是否充足","C":"有没有扩大产能的潜力","D":"售前和售后服务的价格折扣"},"context":[],"answer":"ABC","explanation":"交付能力评估聚焦产能、人力与扩产潜力；价格折扣属于商务条款，不属交付能力范畴。","scoring":""},{"id":"P4-multi-6","paper":4,"focus":"第五章　培训实施支持与供应商管理（流程优化方法、培训支持、供应商管理、成本控制与服务质效）","type":"multi","num":6,"stem":"6．下列属于流程优化常用方法与工具的有（  ）。","options":{"A":"ESIA","B":"PDCA","C":"SIPOC","D":"鱼骨图与 5 Why"},"context":[],"answer":"ABCD","explanation":"ESIA 用于流程再设计，PDCA 用于持续改进，SIPOC 用于界定流程边界，鱼骨图与 5 Why 用于根因分析。","scoring":""},{"id":"P4-multi-7","paper":4,"focus":"第五章　培训实施支持与供应商管理（流程优化方法、培训支持、供应商管理、成本控制与服务质效）","type":"multi","num":7,"stem":"7．HRSSC 服务质效管理的核心指标包括（  ）。","options":{"A":"响应时效","B":"一次解决率","C":"员工满意度","D":"供应商广告投放量"},"context":[],"answer":"ABC","explanation":"响应时效、一次解决率（FCR）、员工满意度是 HRSSC 服务质效三大指标；供应商广告投放量不相关。","scoring":""},{"id":"P4-multi-8","paper":4,"focus":"第五章　培训实施支持与供应商管理（流程优化方法、培训支持、供应商管理、成本控制与服务质效）","type":"multi","num":8,"stem":"8．培训效果评估的层级包括（  ）。","options":{"A":"反应层","B":"学习层","C":"行为层","D":"结果层"},"context":[],"answer":"ABCD","explanation":"柯氏四级评估模型依次为反应层、学习层、行为层、结果层。","scoring":""},{"id":"P4-multi-9","paper":4,"focus":"第五章　培训实施支持与供应商管理（流程优化方法、培训支持、供应商管理、成本控制与服务质效）","type":"multi","num":9,"stem":"9．HRSSC 在培训组织与实施中的事务性工作包括（  ）。","options":{"A":"培训通知与报名组织","B":"场地、设备与物料准备","C":"签到与培训档案归档","D":"培训满意度问卷收集与统计"},"context":[],"answer":"ABCD","explanation":"以上均为 HRSSC 在培训实施环节承担的标准化、事务性支持工作。","scoring":""},{"id":"P4-multi-10","paper":4,"focus":"第五章　培训实施支持与供应商管理（流程优化方法、培训支持、供应商管理、成本控制与服务质效）","type":"multi","num":10,"stem":"10．供应商管理中实现“优胜劣汰”的做法有（  ）。","options":{"A":"建立供应商评估表与评分标准","B":"每次合作后进行服务评价与反馈","C":"建立合格供应商名录并动态更新","D":"仅凭采购人员个人印象决定续用"},"context":[],"answer":"ABC","explanation":"科学的供应商管理依赖量化评估、过程评价与名录动态更新；凭个人印象决策易产生廉政与质量风险。","scoring":""},{"id":"P4-judge-1","paper":4,"focus":"第五章　培训实施支持与供应商管理（流程优化方法、培训支持、供应商管理、成本控制与服务质效）","type":"judge","num":1,"stem":"1．培训需求分析只需考虑员工个人意愿，无需结合组织战略与岗位要求。（  ）","options":{},"context":[],"answer":"错误","explanation":"培训需求分析应从组织、任务（岗位）、人员三个层次展开，仅凭个人意愿会导致培训与业务脱节。","scoring":""},{"id":"P4-judge-2","paper":4,"focus":"第五章　培训实施支持与供应商管理（流程优化方法、培训支持、供应商管理、成本控制与服务质效）","type":"judge","num":2,"stem":"2．撰写培训评估报告时，调查对象应具有代表性，不必强制全体受训人员参加。（  ）","options":{},"context":[],"answer":"正确","explanation":"抽样调查兼顾成本与有效性，强制全员参与易产生应付式作答，反而降低数据质量。","scoring":""},{"id":"P4-judge-3","paper":4,"focus":"第五章　培训实施支持与供应商管理（流程优化方法、培训支持、供应商管理、成本控制与服务质效）","type":"judge","num":3,"stem":"3．讲授法虽然形式单一，但其优势之一是内容系统性强、覆盖面广。（  ）","options":{},"context":[],"answer":"正确","explanation":"讲授法适合系统传授知识与理论，成本低、覆盖面广，但互动性与个性化不足。","scoring":""},{"id":"P4-judge-4","paper":4,"focus":"第五章　培训实施支持与供应商管理（流程优化方法、培训支持、供应商管理、成本控制与服务质效）","type":"judge","num":4,"stem":"4．给供应商下单后，只要合同写清楚了，过程中就不必再与供应商沟通。（  ）","options":{},"context":[],"answer":"错误","explanation":"下单后应持续跟踪进度与质量，及时纠偏，否则易出现延期、错版与质量事故。","scoring":""},{"id":"P4-judge-5","paper":4,"focus":"第五章　培训实施支持与供应商管理（流程优化方法、培训支持、供应商管理、成本控制与服务质效）","type":"judge","num":5,"stem":"5．供应商服务流程的最后环节是付款，付款完成即流程结束。（  ）","options":{},"context":[],"answer":"错误","explanation":"付款后还需进行服务评价与优化改进，形成“评价—反馈—改进”闭环，为后续合作与名录更新提供依据。","scoring":""},{"id":"P4-judge-6","paper":4,"focus":"第五章　培训实施支持与供应商管理（流程优化方法、培训支持、供应商管理、成本控制与服务质效）","type":"judge","num":6,"stem":"6．ESIA 方法中，“自动化（Automate）”是指将重复性、标准化的人工环节交由系统或机器人完成。（  ）","options":{},"context":[],"answer":"正确","explanation":"自动化是 ESIA 的最后一步，典型应用如 RPA 机器人流程自动化处理批量事务。","scoring":""},{"id":"P4-judge-7","paper":4,"focus":"第五章　培训实施支持与供应商管理（流程优化方法、培训支持、供应商管理、成本控制与服务质效）","type":"judge","num":7,"stem":"7．5 Why 分析的目的是追究责任，找出应该被处罚的责任人。（  ）","options":{},"context":[],"answer":"错误","explanation":"5 Why 旨在找到可控的根本原因并制定对策，强调“对事不对人”，追责式归因会导致信息失真。","scoring":""},{"id":"P4-judge-8","paper":4,"focus":"第五章　培训实施支持与供应商管理（流程优化方法、培训支持、供应商管理、成本控制与服务质效）","type":"judge","num":8,"stem":"8．流程优化应优先考虑“清除非增值环节”，而不是直接上系统做自动化。（  ）","options":{},"context":[],"answer":"正确","explanation":"若先自动化一个本应删除的环节，只会用更快的速度做无用功，因此 ESIA 必须按 E→S→I→A 的顺序推进。","scoring":""},{"id":"P4-judge-9","paper":4,"focus":"第五章　培训实施支持与供应商管理（流程优化方法、培训支持、供应商管理、成本控制与服务质效）","type":"judge","num":9,"stem":"9．企业选择供应商时，价格越低越好，应把价格作为唯一评判标准。（  ）","options":{},"context":[],"answer":"错误","explanation":"供应商评估应从资质、价格、师资、案例、服务五个维度综合评价，唯价格论会牺牲质量与交付稳定性。","scoring":""},{"id":"P4-judge-10","paper":4,"focus":"第五章　培训实施支持与供应商管理（流程优化方法、培训支持、供应商管理、成本控制与服务质效）","type":"judge","num":10,"stem":"10．HRSSC 应将培训档案（通知、签到表、课件、评估表）统一归档，作为培训效果评估与审计的依据。（  ）","options":{},"context":[],"answer":"正确","explanation":"培训档案是培训闭环管理的重要凭证，也是后续审计、复盘与知识沉淀的基础。","scoring":""},{"id":"P4-short-1","paper":4,"focus":"第五章　培训实施支持与供应商管理（流程优化方法、培训支持、供应商管理、成本控制与服务质效）","type":"short","num":1,"stem":"1．简述 ESIA 流程优化方法的四个步骤及其内涵。（5 分）","options":{},"context":[],"answer":"（1）E—清除（Eliminate）：识别并删除流程中不创造价值的非增值环节（如冗余审批、重复录入）；\n（2）S—简化（Simplify）：对确需保留但过于复杂的环节进行简化（如合并表单、精简字段）；\n（3）I—整合（Integrate）：将分散在不同部门、不同系统的同类流程进行合并重组，实现端到端贯通；\n（4）A—自动化（Automate）：将重复性、标准化的人工环节交由系统或 RPA 机器人完成。\n应用要点：必须严格按 E→S→I→A 的顺序推进，先删除再简化再整合，最后才考虑自动化，避免“用更快的速度做无用功”。","explanation":"","scoring":"评分要点：四个步骤含义各 1 分，顺序与要点说明 1 分。"},{"id":"P4-short-2","paper":4,"focus":"第五章　培训实施支持与供应商管理（流程优化方法、培训支持、供应商管理、成本控制与服务质效）","type":"short","num":2,"stem":"2．简述培训供应商评估的主要维度与方法。（5 分）","options":{},"context":[],"answer":"评估维度（五维）：\n（1）资质与信誉：营业执照、行业资质、经营年限、客户口碑与合规记录；\n（2）价格与成本：报价水平、付款方式、性价比与隐性成本；\n（3）师资力量：讲师背景、授课经验、行业实战经历；\n（4）课程案例：同类企业交付案例、课程成熟度与可定制化能力；\n（5）服务水平：响应速度、交付质量、售后支持与改进意愿。\n评估方法：①资料审查（资质与案例）；②打分表量化评分（权重赋值）；③试讲/样课评审；④交付能力现场考察（产能、人力、扩产潜力）；⑤历史合作服务评价与动态名录管理。","explanation":"","scoring":"评分要点：五个维度各 0.6 分（共 3 分），评估方法每答出 1 项得 0.4 分（共 2 分）。"},{"id":"P4-short-3","paper":4,"focus":"第五章　培训实施支持与供应商管理（流程优化方法、培训支持、供应商管理、成本控制与服务质效）","type":"short","num":3,"stem":"3．简述 HRSSC 开展服务质效管理的指标与闭环改进机制。（5 分）","options":{},"context":[],"answer":"核心指标：\n（1）响应时效：从工单受理到首次响应的时长；\n（2）一次解决率（FCR）：首次即解决、无需二次流转的工单占比；\n（3）员工满意度：服务态度、专业度与结果满意度的综合评价。\n闭环改进机制：\n①目标设定——按服务目录设定 SLA 标准；\n②过程监控——通过工单系统实时统计指标；\n③根因分析——对超时、低 FCR、低满意度工单用鱼骨图/5 Why 归因；\n④改进落地——用 ESIA/PDCA 优化流程与知识库；\n⑤复盘考核——定期复盘并纳入 HRSSC 运营考核，实现持续改进。","explanation":"","scoring":"评分要点：三项指标各 1 分，闭环机制 2 分（目标—监控—归因—改进—复盘答出 3 项以上即可）。"},{"id":"P4-short-4","paper":4,"focus":"第五章　培训实施支持与供应商管理（流程优化方法、培训支持、供应商管理、成本控制与服务质效）","type":"short","num":4,"stem":"4．简述培训效果评估（柯氏四级）的四个层级及各自评估内容。（5 分）","options":{},"context":[],"answer":"（1）反应层：评估受训者对培训项目的主观感受与满意度（问卷、现场反馈）；\n（2）学习层：评估受训者在知识、技能、态度方面的收获（考试、实操测评）；\n（3）行为层：评估受训者回到岗位后工作行为方式的变化与改进（上级观察、360 度反馈）；\n（4）结果层：评估受训者取得的生产经营或技术管理方面的业绩（绩效指标、质量、成本、效率改善）。","explanation":"","scoring":"评分要点：四个层级各 1 分，内容描述准确再加 1 分。"},{"id":"P4-task-1","paper":4,"focus":"第五章　培训实施支持与供应商管理（流程优化方法、培训支持、供应商管理、成本控制与服务质效）","type":"task","num":1,"stem":"1．【实操题 1】培训项目组织与实施支持（10 分）","options":{},"context":["背景：公司计划于 2026 年 11 月开展“新员工入职培训”，参训对象为近 3 个月入职的 42 名新员工，培训为期 2 天，含企业文化、制度合规、职业素养三门课程，其中“制度合规”由外部讲师讲授。你是 HRSSC 培训支持专员。","任务：","（1）列出培训前、培训中、培训后三个阶段你需完成的具体工作；（6 分）","（2）设计一份培训效果评估方案（含评估层级与工具）；（3 分）","（3）指出本次培训档案归档应包含的 3 类材料。（1 分）"],"answer":"（1）三个阶段工作：\n培训前：①与 HRBP/用人部门确认参训名单与培训需求；②发布培训通知并完成报名统计；③确认讲师（含外部讲师合同与服务要求）、场地、设备与物料；④准备签到表、课件、学员手册与评估问卷；⑤发送开课提醒与日程。\n培训中：①现场签到与考勤管理；②设备调试与讲师接待；③课堂秩序维护与过程记录（照片、视频）；④突发情况应急处理（讲师迟到、设备故障）；⑤收集课间反馈并及时调整。\n培训后：①发放并回收满意度问卷（反应层）；②组织考试或实操测评（学习层）；③统计出勤、成绩并反馈给 HRBP 与用人部门；④整理培训档案并归档；⑤输出培训总结报告与改进建议，跟进供应商服务评价与结算。\n（2）评估方案：\n①反应层——培训满意度问卷（课程内容、讲师水平、组织服务、总体评价，5 分制）；\n②学习层——闭卷考试（制度合规）＋情景实操测评（职业素养）；\n③行为层——培训后 1 个月由直线经理观察评价新员工制度遵守与职业行为表现；\n④结果层——对比参训与未参训新员工的试用期留存率与差错率。\n（3）档案材料：①培训通知与参训名单、签到表；②课件、讲师资料与外部讲师服务评价表；③考试/测评成绩、满意度问卷统计与培训总结报告。","explanation":"","scoring":"评分要点：三阶段工作每阶段 2 分（每阶段答出 3 项以上）；评估方案按柯氏四层设计 3 分；归档材料 1 分。"},{"id":"P4-task-2","paper":4,"focus":"第五章　培训实施支持与供应商管理（流程优化方法、培训支持、供应商管理、成本控制与服务质效）","type":"task","num":2,"stem":"2．【实操题 2】HRSSC 流程优化方案设计（10 分）","options":{},"context":["背景：公司 HRSSC 的“员工开具收入证明”流程长期被投诉：员工需先向 HRBP 申请、HRBP 转交 HRSSC、HRSSC 手工核对工资数据、打印盖章后再由员工现场领取，平均耗时 3 个工作日，一次解决率仅 62%，员工满意度偏低。","任务：","（1）运用鱼骨图/5 Why 思路，列出导致该流程低效的 4 项可能原因；（4 分）","（2）运用 ESIA 方法提出 4 条优化措施，并说明对应的 ESIA 步骤；（4 分）","（3）设计 2 项优化后的效果衡量指标。（2 分）"],"answer":"（1）可能原因：\n①流程环节冗余：需经 HRBP 转手，而 HRBP 并不掌握工资数据，属非增值环节；\n②数据获取方式落后：HRSSC 手工核对工资数据，未与 eHR 系统打通，效率低且易出错；\n③交付方式单一：必须现场领取，未提供电子化交付渠道；\n④缺乏标准模板与 SLA：无统一模板与时限承诺，导致处理时长不可控；\n⑤信息不对称：员工不知进度，缺乏状态查询渠道，感知体验差。（答出任意 4 项即可）\n（2）优化措施（对应 ESIA）：\n①E 清除——取消 HRBP 转交环节，员工直接在服务台/自助平台提交申请；\n②S 简化——统一收入证明模板，固定字段（姓名、证件号、入职日期、收入区间、用途），减少人工编辑；\n③I 整合——将申请、核对、审批、盖章整合到 OA 一条审批流，实现端到端贯通；\n④A 自动化——与 eHR 工资模块对接，系统自动带出收入数据并生成 PDF，加盖电子印章后在线推送，同步推送办理进度通知。\n（3）效果衡量指标：①一次解决率由 62% 提升至 90% 以上；②平均响应时效由 3 个工作日缩短至 4 小时内；③员工满意度评分提升；④人工处理工时下降比例。（答出任意 2 项即可，需说明优化前后的目标值）","explanation":"","scoring":"评分要点：原因分析每项 1 分；优化措施每条 1 分（须对应 ESIA 步骤，未对应酌情扣分）；指标每项 1 分。重点考查根因分析能力、ESIA 的正确运用与量化改进意识。"},{"id":"P5-single-1","paper":5,"focus":"综合卷　三支柱协同与运营管理、数据核查、法规与职业伦理、综合情景案例","type":"single","num":1,"stem":"1．在人力资源数据核查工作中，三支柱的分工通常是（  ）。","options":{"A":"由 COE 负责，HRBP 执行","B":"由 COE 制定标准、HRBP 确认业务口径、HRSSC 执行核查并反馈","C":"通常由 COE 和 HRBP 很少介入，全部由 HRSSC 独立完成","D":"由 COE 和 HRBP 制定并执行策略，HRSSC 不参与"},"context":[],"answer":"B","explanation":"数据核查中 COE 定义数据标准与口径，HRBP 确认业务侧实际需求，HRSSC 承担采集、核查、清洗与反馈的执行工作。","scoring":""},{"id":"P5-single-2","paper":5,"focus":"综合卷　三支柱协同与运营管理、数据核查、法规与职业伦理、综合情景案例","type":"single","num":2,"stem":"2．关于 HRSSC 处理员工投诉，当遇到与政策相关的投诉时，SSC 通常会移交给（  ）。","options":{"A":"HRBP","B":"HRIS","C":"COE","D":"员工关系部"},"context":[],"answer":"C","explanation":"政策类投诉需由 COE 解释与裁定；业务类问题移交 HRBP；系统类问题由系统支持团队处理。","scoring":""},{"id":"P5-single-3","paper":5,"focus":"综合卷　三支柱协同与运营管理、数据核查、法规与职业伦理、综合情景案例","type":"single","num":3,"stem":"3．下列属于“系统使用类”投诉的是（  ）。","options":{"A":"系统使用不方便","B":"合同审批流程太长","C":"领导处理问题不公","D":"服务人员指导不够清晰"},"context":[],"answer":"A","explanation":"系统使用类投诉聚焦系统易用性、稳定性与功能缺陷；B 属流程类，C 属管理类，D 属服务类。","scoring":""},{"id":"P5-single-4","paper":5,"focus":"综合卷　三支柱协同与运营管理、数据核查、法规与职业伦理、综合情景案例","type":"single","num":4,"stem":"4．为解决员工“咨询难”的痛点，共享服务中心通常会建立统一的（  ）。","options":{"A":"劳动关系协调委员会","B":"工会","C":"服务平台/员工咨询服务热线","D":"职工代表大会"},"context":[],"answer":"C","explanation":"统一的服务台与咨询热线是 HRSSC 的标配，配合知识库实现标准化应答与闭环记录。","scoring":""},{"id":"P5-single-5","paper":5,"focus":"综合卷　三支柱协同与运营管理、数据核查、法规与职业伦理、综合情景案例","type":"single","num":5,"stem":"5．下列不属于员工关系维护内容的是（  ）。","options":{"A":"劳动关系","B":"人际关系","C":"民事关系","D":"服务与关怀"},"context":[],"answer":"C","explanation":"员工关系维护聚焦劳动关系、人际关系与服务关怀；民事关系与员工关系管理无直接关联。","scoring":""},{"id":"P5-single-6","paper":5,"focus":"综合卷　三支柱协同与运营管理、数据核查、法规与职业伦理、综合情景案例","type":"single","num":6,"stem":"6．下列关于 HRSSC 处理员工投诉的描述，错误的是（  ）。","options":{"A":"通常会建立统一的员工咨询服务热线处理问询与投诉","B":"关注事件的闭环处理和完整记录，事事有回音、件件有记录","C":"帮助员工解决问题，提高员工满意度","D":"当员工情绪不好时，不理会其情绪，关注客观事实即可"},"context":[],"answer":"D","explanation":"应先共情安抚、稳定情绪再处理事实，既体现“以员工为中心”的服务意识，也有利于问题真正闭环。","scoring":""},{"id":"P5-single-7","paper":5,"focus":"综合卷　三支柱协同与运营管理、数据核查、法规与职业伦理、综合情景案例","type":"single","num":7,"stem":"7．在人才安居服务中，下列不属于 HRSSC 工作内容的是（  ）。","options":{"A":"政策咨询解答","B":"申报结果反馈","C":"申报指导","D":"组织专家审核"},"context":[],"answer":"D","explanation":"组织专家审核属于政府主管部门或第三方评审机构的职责，HRSSC 负责咨询、指导与结果反馈等事务性服务。","scoring":""},{"id":"P5-single-8","paper":5,"focus":"综合卷　三支柱协同与运营管理、数据核查、法规与职业伦理、综合情景案例","type":"single","num":8,"stem":"8．人力资源共享服务中心建设七步法中，位于“服务目录设计”之后、“组织设计”之前的环节是（  ）。","options":{"A":"业务流程梳理","B":"可行性分析","C":"系统选型","D":"试点运行"},"context":[],"answer":"C","explanation":"七步法顺序：可行性分析→业务流程梳理→服务目录设计→系统选型→组织设计→试点运行→全面推广。","scoring":""},{"id":"P5-single-9","paper":5,"focus":"综合卷　三支柱协同与运营管理、数据核查、法规与职业伦理、综合情景案例","type":"single","num":9,"stem":"9．HRSSC 的服务目录主要作用是（  ）。","options":{"A":"明确可提供的服务事项、标准与时效承诺（SLA）","B":"记录员工的家庭情况","C":"替代劳动合同","D":"用于对外宣传招聘"},"context":[],"answer":"A","explanation":"服务目录是 HRSSC 与员工/业务部门的“服务契约”，明确服务事项、办理标准、时效承诺与责任边界。","scoring":""},{"id":"P5-single-10","paper":5,"focus":"综合卷　三支柱协同与运营管理、数据核查、法规与职业伦理、综合情景案例","type":"single","num":10,"stem":"10．下列职业守则表述中，正确的是（  ）。","options":{"A":"诚实公正、严谨求是","B":"人尽其才、能置其位","C":"勤勉好学、追求卓越","D":"以上都正确"},"context":[],"answer":"D","explanation":"人力资源从业人员的职业守则包括诚实公正严谨求是、人尽其才能置其位、有效激励促进和谐、勤勉好学追求卓越、科学管理合理配置等。","scoring":""},{"id":"P5-single-11","paper":5,"focus":"综合卷　三支柱协同与运营管理、数据核查、法规与职业伦理、综合情景案例","type":"single","num":11,"stem":"11．HRSSC 在处理员工个人信息时，应遵循的核心原则不包括（  ）。","options":{"A":"合法、正当、必要与诚信原则","B":"最小必要原则","C":"公开透明与知情同意","D":"尽可能多地采集与长期留存"},"context":[],"answer":"D","explanation":"《个人信息保护法》强调最小必要、目的限定与限期存储，超范围采集与无限期留存均属违规。","scoring":""},{"id":"P5-single-12","paper":5,"focus":"综合卷　三支柱协同与运营管理、数据核查、法规与职业伦理、综合情景案例","type":"single","num":12,"stem":"12．员工在试用期解除劳动合同，应提前（  ）通知用人单位。","options":{"A":"3 日","B":"7 日","C":"15 日","D":"30 日"},"context":[],"answer":"A","explanation":"《劳动合同法》第三十七条：劳动者在试用期内提前 3 日通知用人单位，可以解除劳动合同；转正后需提前 30 日书面通知。","scoring":""},{"id":"P5-single-13","paper":5,"focus":"综合卷　三支柱协同与运营管理、数据核查、法规与职业伦理、综合情景案例","type":"single","num":13,"stem":"13．用人单位自用工之日起超过 1 个月不满 1 年未与劳动者订立书面劳动合同的，应当（  ）。","options":{"A":"向劳动者每月支付二倍的工资","B":"向劳动者支付一个月工资作为补偿后即可免责","C":"无需承担任何责任","D":"视为已订立无固定期限劳动合同"},"context":[],"answer":"A","explanation":"《劳动合同法》第八十二条：超过 1 个月不满 1 年未订立书面劳动合同的，应当向劳动者每月支付二倍的工资；满 1 年未订立的，视为已订立无固定期限劳动合同。","scoring":""},{"id":"P5-single-14","paper":5,"focus":"综合卷　三支柱协同与运营管理、数据核查、法规与职业伦理、综合情景案例","type":"single","num":14,"stem":"14．下列关于劳务派遣的表述，正确的是（  ）。","options":{"A":"劳务派遣单位应向被派遣劳动者按月支付劳动报酬","B":"用工单位可以将被派遣劳动者再派遣到其他用人单位","C":"劳务派遣单位可以向被派遣劳动者收取费用","D":"用工单位与被派遣劳动者之间存在劳动合同关系"},"context":[],"answer":"A","explanation":"劳务派遣单位是用人单位，应履行按月支付报酬等义务；不得再派遣、不得收费；劳动合同关系存在于派遣单位与被派遣劳动者之间。","scoring":""},{"id":"P5-single-15","paper":5,"focus":"综合卷　三支柱协同与运营管理、数据核查、法规与职业伦理、综合情景案例","type":"single","num":15,"stem":"15．下列情形中，用人单位可以单方解除劳动合同且无需支付经济补偿的是（  ）。","options":{"A":"劳动者严重违反用人单位的规章制度的","B":"劳动者患病在规定的医疗期满后不能从事原工作的","C":"劳动者不能胜任工作，经过培训仍不能胜任的","D":"劳动合同订立时所依据的客观情况发生重大变化的"},"context":[],"answer":"A","explanation":"因劳动者过错（严重违纪等）解除的，用人单位无需支付经济补偿；B、C、D 属非过错性解除或情势变更，需依法支付经济补偿或提前通知。","scoring":""},{"id":"P5-single-16","paper":5,"focus":"综合卷　三支柱协同与运营管理、数据核查、法规与职业伦理、综合情景案例","type":"single","num":16,"stem":"16．在 HRSSC 运营管理中，“一次解决率（FCR）”指的是（  ）。","options":{"A":"工单在首次响应时即被解决、无需二次流转的比例","B":"工单在 24 小时内响应的比例","C":"员工投诉被撤回的比例","D":"系统故障一次修复成功的比例"},"context":[],"answer":"A","explanation":"一次解决率衡量的是“首次接触即解决”的能力，是 HRSSC 服务质量与知识库成熟度的核心指标。","scoring":""},{"id":"P5-single-17","paper":5,"focus":"综合卷　三支柱协同与运营管理、数据核查、法规与职业伦理、综合情景案例","type":"single","num":17,"stem":"17．本课程教学内容对接的教育部 1+X 证书是（  ）。","options":{"A":"人力资源共享服务职业技能等级证书","B":"企业人力资源管理师职业资格证书","C":"劳动关系协调员职业资格证书","D":"薪税师职业技能等级证书"},"context":[],"answer":"A","explanation":"本课程对接教育部 1+X 人力资源共享服务职业技能等级证书（初级）标准，实现“课证融通”。","scoring":""},{"id":"P5-single-18","paper":5,"focus":"综合卷　三支柱协同与运营管理、数据核查、法规与职业伦理、综合情景案例","type":"single","num":18,"stem":"18．在 HRSSC 建设初期，最适合采用的共享服务模式通常是（  ）。","options":{"A":"市场模式","B":"强制模式","C":"推荐模式","D":"完全外包模式"},"context":[],"answer":"C","explanation":"建设初期 SSC 能力与口碑尚在培育，采用推荐模式（鼓励但不强制）阻力较小，待服务成熟后再逐步过渡到强制模式或市场模式。","scoring":""},{"id":"P5-single-19","paper":5,"focus":"综合卷　三支柱协同与运营管理、数据核查、法规与职业伦理、综合情景案例","type":"single","num":19,"stem":"19．下列指标中，最适合用于衡量 HRSSC 数字化运营效率的是（  ）。","options":{"A":"人均服务员工数与服务自动化率","B":"员工平均通勤距离","C":"办公场地面积","D":"员工平均年龄"},"context":[],"answer":"A","explanation":"人均服务比与服务自动化率直接反映共享中心的规模化与数字化水平，是运营效率的核心衡量指标。","scoring":""},{"id":"P5-single-20","paper":5,"focus":"综合卷　三支柱协同与运营管理、数据核查、法规与职业伦理、综合情景案例","type":"single","num":20,"stem":"20．在跨部门协同中，HRSSC 与财务部门最常见的协同场景是（  ）。","options":{"A":"薪酬核算数据与成本科目核对、付款流程对接","B":"产品研发评审","C":"市场营销方案制定","D":"生产设备检修"},"context":[],"answer":"A","explanation":"薪酬发放涉及工资数据、成本归集与付款审批，是 HRSSC 与财务协同最频繁的场景，需确保 eHR 与财务系统数据一致。","scoring":""},{"id":"P5-multi-1","paper":5,"focus":"综合卷　三支柱协同与运营管理、数据核查、法规与职业伦理、综合情景案例","type":"multi","num":1,"stem":"1．下列职业守则表述中，正确的有（  ）。","options":{"A":"诚实公正、严谨求是","B":"人尽其才、能置其位","C":"有效激励、促进和谐","D":"勤勉好学、追求卓越"},"context":[],"answer":"ABCD","explanation":"四项均为人力资源从业人员职业守则的规范表述，另含“科学管理、合理配置”。","scoring":""},{"id":"P5-multi-2","paper":5,"focus":"综合卷　三支柱协同与运营管理、数据核查、法规与职业伦理、综合情景案例","type":"multi","num":2,"stem":"2．HRSSC 建设七步法包括（  ）。","options":{"A":"可行性分析与业务流程梳理","B":"服务目录设计","C":"系统选型与组织设计","D":"试点运行与全面推广"},"context":[],"answer":"ABCD","explanation":"七步法完整流程：可行性分析→业务流程梳理→服务目录设计→系统选型→组织设计→试点运行→全面推广。","scoring":""},{"id":"P5-multi-3","paper":5,"focus":"综合卷　三支柱协同与运营管理、数据核查、法规与职业伦理、综合情景案例","type":"multi","num":3,"stem":"3．HRSSC 员工咨询应答应遵循的原则有（  ）。","options":{"A":"及时响应、态度亲和","B":"口径统一、依据制度","C":"保守秘密、保护隐私","D":"闭环记录、知识沉淀"},"context":[],"answer":"ABCD","explanation":"四项共同构成 HRSSC 咨询应答的服务标准，体现专业性与服务意识。","scoring":""},{"id":"P5-multi-4","paper":5,"focus":"综合卷　三支柱协同与运营管理、数据核查、法规与职业伦理、综合情景案例","type":"multi","num":4,"stem":"4．员工投诉按类型通常可分为（  ）。","options":{"A":"政策类投诉","B":"流程类投诉","C":"系统使用类投诉","D":"服务态度类投诉"},"context":[],"answer":"ABCD","explanation":"按性质划分便于分类流转与责任归属：政策类→COE，业务类→HRBP，系统类→系统支持，服务类→SSC 自查整改。","scoring":""},{"id":"P5-multi-5","paper":5,"focus":"综合卷　三支柱协同与运营管理、数据核查、法规与职业伦理、综合情景案例","type":"multi","num":5,"stem":"5．下列做法中，符合人力资源数据安全管理要求的有（  ）。","options":{"A":"按岗位职责实行系统权限分级授权","B":"敏感数据导出需审批并加密传输","C":"定期开展权限复核与账号清理","D":"将员工花名册共享至公开网盘方便查阅"},"context":[],"answer":"ABC","explanation":"权限分级、审批加密、定期复核均为合规做法；将花名册置于公开网盘属严重违规，可能导致个人信息泄露。","scoring":""},{"id":"P5-multi-6","paper":5,"focus":"综合卷　三支柱协同与运营管理、数据核查、法规与职业伦理、综合情景案例","type":"multi","num":6,"stem":"6．HRSSC 与 HRBP、COE 实现高效协同的支撑机制包括（  ）。","options":{"A":"统一的服务目录与 SLA 标准","B":"工单系统与知识库","C":"定期的三方沟通例会","D":"共享的数据报表与看板"},"context":[],"answer":"ABCD","explanation":"制度（服务目录/SLA）、系统（工单/知识库）、机制（例会）与数据（共享看板）共同支撑三支柱高效协同。","scoring":""},{"id":"P5-multi-7","paper":5,"focus":"综合卷　三支柱协同与运营管理、数据核查、法规与职业伦理、综合情景案例","type":"multi","num":7,"stem":"7．下列情形中，用人单位应当向劳动者支付经济补偿的有（  ）。","options":{"A":"用人单位提出并与劳动者协商一致解除劳动合同的","B":"劳动者患病医疗期满后不能从事原工作，也不能从事另行安排的工作，用人单位解除的","C":"劳动者严重违反用人单位规章制度被解除的","D":"劳动合同期满，用人单位降低原合同约定条件续订而劳动者不同意续订的"},"context":[],"answer":"ABD","explanation":"《劳动合同法》第四十六条规定了支付经济补偿的情形；C 属劳动者过错解除，无需支付经济补偿。","scoring":""},{"id":"P5-multi-8","paper":5,"focus":"综合卷　三支柱协同与运营管理、数据核查、法规与职业伦理、综合情景案例","type":"multi","num":8,"stem":"8．HRSSC 运营管理中可用于持续改进的工具与方法有（  ）。","options":{"A":"PDCA 循环","B":"鱼骨图与 5 Why 根因分析","C":"ESIA 流程优化","D":"服务质效指标监控与复盘"},"context":[],"answer":"ABCD","explanation":"PDCA 提供改进闭环，鱼骨图与 5 Why 用于归因，ESIA 用于流程再设计，指标监控与复盘用于效果验证。","scoring":""},{"id":"P5-multi-9","paper":5,"focus":"综合卷　三支柱协同与运营管理、数据核查、法规与职业伦理、综合情景案例","type":"multi","num":9,"stem":"9．本课程强调的“课证融通”具体体现在（  ）。","options":{"A":"教学内容对接 1+X 人力资源共享服务职业技能等级证书（初级）标准","B":"采用该证书配套指定教材","C":"综合实践项目对标证书实操技能考核要求","D":"取得证书可按学校规定申请相应成绩认定"},"context":[],"answer":"ABCD","explanation":"课证融通体现在标准对接、教材选用、实践对标与成绩认定四个层面。","scoring":""},{"id":"P5-multi-10","paper":5,"focus":"综合卷　三支柱协同与运营管理、数据核查、法规与职业伦理、综合情景案例","type":"multi","num":10,"stem":"10．在跨部门协同场景中，HRSSC 需要与哪些部门高频协作？（  ）","options":{"A":"财务部门（薪酬发放与成本核对）","B":"用人部门（考勤与绩效确认）","C":"IT 部门（系统运维与权限管理）","D":"行政与法务（合规与制度支持）"},"context":[],"answer":"ABCD","explanation":"HRSSC 处于流程中枢，需与财务、业务、IT、行政法务等多方高频协作，跨部门沟通能力是核心职业素养。","scoring":""},{"id":"P5-judge-1","paper":5,"focus":"综合卷　三支柱协同与运营管理、数据核查、法规与职业伦理、综合情景案例","type":"judge","num":1,"stem":"1．HRSSC 的核心价值在于把事务性、标准化的工作集中处理，从而释放 HRBP 与 COE 精力投入高价值工作。（  ）","options":{},"context":[],"answer":"正确","explanation":"这正是共享服务模式的初衷：规模化、标准化处理事务性工作，让 HR 从“事务型”转向“战略型”。","scoring":""},{"id":"P5-judge-2","paper":5,"focus":"综合卷　三支柱协同与运营管理、数据核查、法规与职业伦理、综合情景案例","type":"judge","num":2,"stem":"2．HRSSC 的服务目录一经制定即永久有效，无需根据业务变化更新。（  ）","options":{},"context":[],"answer":"错误","explanation":"服务目录应随业务变化、系统能力与员工需求定期评审更新，否则会与实际服务脱节。","scoring":""},{"id":"P5-judge-3","paper":5,"focus":"综合卷　三支柱协同与运营管理、数据核查、法规与职业伦理、综合情景案例","type":"judge","num":3,"stem":"3．员工投诉涉及政策解释的，HRSSC 应自行解释并答复，无需移交 COE。（  ）","options":{},"context":[],"answer":"错误","explanation":"政策类投诉应由 COE 统一解释与裁定，避免口径不一导致新的争议。","scoring":""},{"id":"P5-judge-4","paper":5,"focus":"综合卷　三支柱协同与运营管理、数据核查、法规与职业伦理、综合情景案例","type":"judge","num":4,"stem":"4．处理员工个人信息时，只要员工入职时签署过一次同意书，后续所有处理行为都无需再次取得同意。（  ）","options":{},"context":[],"answer":"错误","explanation":"处理目的、方式、种类发生变更，或处理敏感个人信息、对外提供、公开等情形，应重新取得同意（单独同意）。","scoring":""},{"id":"P5-judge-5","paper":5,"focus":"综合卷　三支柱协同与运营管理、数据核查、法规与职业伦理、综合情景案例","type":"judge","num":5,"stem":"5．用人单位以劳动者严重违反规章制度为由解除劳动合同，无需支付经济补偿。（  ）","options":{},"context":[],"answer":"正确","explanation":"《劳动合同法》第三十九条规定的过错性解除，用人单位无需支付经济补偿，但须保证规章制度合法有效且举证充分。","scoring":""},{"id":"P5-judge-6","paper":5,"focus":"综合卷　三支柱协同与运营管理、数据核查、法规与职业伦理、综合情景案例","type":"judge","num":6,"stem":"6．HRSSC 的数字化转型就是简单地把线下流程搬到线上，无需重新设计流程。（  ）","options":{},"context":[],"answer":"错误","explanation":"数字化应是“流程再造＋系统固化”，若先不优化流程就上系统，只会把低效流程固化得更快。","scoring":""},{"id":"P5-judge-7","paper":5,"focus":"综合卷　三支柱协同与运营管理、数据核查、法规与职业伦理、综合情景案例","type":"judge","num":7,"stem":"7．跨部门协同中，HRSSC 只需按流程执行，无需主动沟通与反馈。（  ）","options":{},"context":[],"answer":"错误","explanation":"HRSSC 处于流程中枢，需主动沟通、及时反馈并推动问题解决，这是服务意识与责任担当的体现。","scoring":""},{"id":"P5-judge-8","paper":5,"focus":"综合卷　三支柱协同与运营管理、数据核查、法规与职业伦理、综合情景案例","type":"judge","num":8,"stem":"8．员工满意度调查完成后，若不跟踪改进措施的落地效果，调查本身难以产生实际价值。（  ）","options":{},"context":[],"answer":"正确","explanation":"满意度调查的价值在于闭环改进，跟踪反馈是最后也是关键的一步。","scoring":""},{"id":"P5-judge-9","paper":5,"focus":"综合卷　三支柱协同与运营管理、数据核查、法规与职业伦理、综合情景案例","type":"judge","num":9,"stem":"9．取得 1+X 人力资源共享服务职业技能等级证书（初级）的学生，可凭证书按学校相关规定申请课程实践考核成绩的相应认定。（  ）","options":{},"context":[],"answer":"正确","explanation":"这是本课程“课证融通”设计的制度安排，鼓励学生以证促学、以学备考。","scoring":""},{"id":"P5-judge-10","paper":5,"focus":"综合卷　三支柱协同与运营管理、数据核查、法规与职业伦理、综合情景案例","type":"judge","num":10,"stem":"10．HRSSC 员工可以将工作中接触到的薪酬数据用于个人研究或分享给同学参考，只要不对外公开即可。（  ）","options":{},"context":[],"answer":"错误","explanation":"薪酬数据属核心涉密信息，任何超范围使用与对外提供均违反数据保密义务与《个人信息保护法》。","scoring":""},{"id":"P5-short-1","paper":5,"focus":"综合卷　三支柱协同与运营管理、数据核查、法规与职业伦理、综合情景案例","type":"short","num":1,"stem":"1．简述人力资源共享服务中心（HRSSC）的建设流程（七步法）。（5 分）","options":{},"context":[],"answer":"（1）可行性分析：评估企业规模、业务集中度、现有 HR 运营痛点与投入产出，明确建设必要性与目标；\n（2）业务流程梳理：盘点现有人事、薪酬、社保、招聘等流程，识别可标准化、可共享的事项；\n（3）服务目录设计：明确服务事项、办理标准、时效承诺（SLA）与责任边界；\n（4）系统选型：选择或搭建 eHR、OA、自助服务平台与工单系统，支撑流程线上化；\n（5）组织设计：设置服务台、运营管理、流程管理、系统支持等内部单元，明确岗位职责与人员配置；\n（6）试点运行：选择部分业务单元或模块先行试点，验证流程与系统并积累经验；\n（7）全面推广：总结试点经验，完善服务目录与知识库，实现全集团推广并转入持续优化。","explanation":"","scoring":"评分要点：七个步骤每答对一步得 0.7 分，表述完整得满分。"},{"id":"P5-short-2","paper":5,"focus":"综合卷　三支柱协同与运营管理、数据核查、法规与职业伦理、综合情景案例","type":"short","num":2,"stem":"2．简述人力资源数据核查工作中的三支柱分工。（5 分）","options":{},"context":[],"answer":"（1）COE（专家中心）：制定数据标准、数据字典与核查规则，明确口径定义、必填字段与校验逻辑，对争议口径作最终裁定；\n（2）HRBP（业务伙伴）：提出业务侧数据需求，确认业务口径（如绩效归属、异动生效时间），并反馈业务异常数据；\n（3）HRSSC（共享服务中心）：依据数据字典与规则承担数据采集、录入、核查、清洗与反馈的具体执行，输出核查报告并推动整改；\n（4）协同闭环：COE 定标准→HRSSC 执行核查→HRBP 确认业务口径→HRSSC 整改并归档，形成数据质量持续改进闭环。","explanation":"","scoring":"评分要点：三支柱各自职责每点 1 分，协同闭环 2 分。"},{"id":"P5-short-3","paper":5,"focus":"综合卷　三支柱协同与运营管理、数据核查、法规与职业伦理、综合情景案例","type":"short","num":3,"stem":"3．简述 HRSSC 处理员工投诉的标准流程与注意事项。（5 分）","options":{},"context":[],"answer":"流程：\n（1）受理登记：通过热线/服务台/工单系统统一受理，完整记录投诉人、时间、事项与诉求；\n（2）情绪安抚：先共情倾听、稳定情绪，再聚焦客观事实；\n（3）分类判定：按政策类、流程类、系统类、服务态度类分类；\n（4）分流转办：政策类移交 COE，业务类移交 HRBP，系统类转系统支持，服务类由 SSC 自查整改；\n（5）处理反馈：在 SLA 时限内反馈处理进展与结果，做到事事有回音；\n（6）记录归档与复盘：完整归档工单，沉淀知识库，定期复盘共性问题并优化流程。\n注意事项：口径统一、依法合规、保守秘密、避免推诿、注重闭环与员工体验。","explanation":"","scoring":"评分要点：流程六步答出 5 步以上得 4 分，注意事项 1 分。"},{"id":"P5-short-4","paper":5,"focus":"综合卷　三支柱协同与运营管理、数据核查、法规与职业伦理、综合情景案例","type":"short","num":4,"stem":"4．结合课程思政要求，简述 HRSSC 从业人员应具备的职业伦理与合规意识。（5 分）","options":{},"context":[],"answer":"（1）职业道德与职业伦理：树立严谨细致、诚实守信的职业操守，强化薪酬、档案等涉密数据的保密意识，养成“以员工为中心”的服务意识；\n（2）法治意识与合规文化：敬畏《劳动合同法》《社会保险法》《住房公积金管理条例》《个人所得税法》《个人信息保护法》，依法合规办理入转调离、社保申报与薪酬核算；\n（3）社会主义核心价值观：敬业奉献、公平公正，反对就业歧视与信息造假，维护劳动者合法权益；\n（4）数字化伦理与数据安全：坚守数据隐私保护底线，做到技术向善、数据有界，落实权限分级与最小必要原则；\n（5）责任担当与团队协作：在跨部门协同中主动沟通、不推诿，形成精益求精、持续改进的精益职业素养。","explanation":"","scoring":"评分要点：五个维度每答对一个维度得 1 分，能结合法规或案例说明可酌情加分。"},{"id":"P5-task-1","paper":5,"focus":"综合卷　三支柱协同与运营管理、数据核查、法规与职业伦理、综合情景案例","type":"task","num":1,"stem":"1．【实操题 1】综合情景：薪酬差错与员工投诉处置（10 分）","options":{},"context":["背景：员工吴某发现 10 月工资中未支付国庆 3 天法定节假日加班费，情绪激动地拨打了 HRSSC 服务热线投诉，并在部门群里表示“公司克扣员工加班费，我要去劳动仲裁”。经 HRSSC 复核，确因当月复核工资表时疏忽漏发。吴某劳动合同约定以实际工资作为加班费计算基数，其基本工资 4500 元、岗位津贴 1500 元，公司实行标准 8 小时工作制。","任务：","（1）写出你作为 HRSSC 专员的处置流程；（4 分）","（2）写出与吴某沟通的具体话术要点；（3 分）","（3）计算吴某应补发的加班费金额（日工资按 21.75 天、8 小时/天折算，保留整数）；（2 分）","（4）指出事后应从流程上采取的 1 项改进措施。（1 分）"],"answer":"（1）处置流程：①立即受理并安抚情绪，承诺在 SLA 时限内核实并回复；②核实数据（调取考勤加班记录、审批单、工资表与银行发放记录），确认漏发事实与金额；③分类定性——属薪酬差错类（流程类）问题，SSC 内部可闭环解决，涉及金额补发需同步直线经理与 HRBP；④制定补救方案（次月工资补发或单独补发，并说明补发时间与方式）；⑤主动沟通致歉并反馈处理结果；⑥形成差错记录与整改台账，纳入复盘；⑦必要时在部门群作合规说明，避免谣言扩散。\n（2）沟通话术要点：“吴先生您好，非常抱歉给您带来困扰。我们已核实：您在国庆 10 月 1—3 日加班 3 天，因我们复核环节的疏忽导致加班费漏发，责任在我们。经核算应补发××元，将于×月×日随工资一并发放（或单独补发），届时请您核对。后续我们会增加加班费专项复核环节，杜绝此类问题再次发生。给您带来不便，再次向您致歉。”（要点：主动致歉、说明原因、给出金额与时间、承诺改进）\n（3）加班费计算：小时工资＝6000÷21.75÷8≈34.48 元/小时；法定节假日加班 3 天×8 小时＝24 小时；应补发＝34.48×24×300%≈2483 元。\n（4）改进措施：①在薪酬核算流程中增设“加班费专项复核”环节，将考勤系统加班记录与薪酬系统加班费项目自动比对；②实行薪酬双人复核与差错台账管理；③将本次案例纳入知识库与培训案例，提升核算人员风险意识。（答出 1 项即可）","explanation":"","scoring":"评分要点：流程 4 分（受理安抚—核实—定性—补救—沟通—整改—舆情应对，答出 4 项以上）；话术 3 分（态度、原因、金额时间、改进承诺）；计算 2 分；改进措施 1 分。重点考查服务意识、法规应用与闭环改进能力。"},{"id":"P5-task-2","paper":5,"focus":"综合卷　三支柱协同与运营管理、数据核查、法规与职业伦理、综合情景案例","type":"task","num":2,"stem":"2．【实操题 2】综合项目：为企业设计 HRSSC 流程优化方案（10 分）","options":{},"context":["背景：某集团现有员工 3000 人，下设 6 个业务单元，各单元 HR 独立运作，存在流程不统一、重复录入、员工咨询无统一入口、人均服务比低（1:180）等问题。集团决定建设 HRSSC，并委托你所在小组完成“员工入转调离流程优化方案”的设计。","任务：","（1）列出方案应包含的 6 个核心模块；（3 分）","（2）运用 SIPOC 方法界定“员工入职流程”的边界；（3 分）","（3）提出 3 条具体优化措施并说明预期效果；（3 分）","（4）说明方案中应体现的 1 项课程思政/合规要素。（1 分）"],"answer":"（1）方案核心模块：①现状调研与问题诊断（痛点清单、根因分析）；②目标与范围界定（覆盖入转调离四类场景、适用业务单元）；③流程现状图与优化后流程图（含前后对比）；④组织与职责设计（三支柱分工、服务台与权限）；⑤系统支撑方案（eHR/OA 流程配置、自助服务与电子签）；⑥实施计划与效果评估（分阶段里程碑、风险预案、量化指标）。\n（2）SIPOC 界定：\nS（供应商）：用人部门、招聘团队、候选人、IT 部门、行政；\nI（输入）：Offer 与录用条件、入职材料（证件、体检、离职证明）、岗位与薪酬数据、编制信息；\nP（流程）：入职准备→资料审核→文件签署→信息维护→权限开通→人事通知发放；\nO（输出）：eHR 员工档案、劳动合同与协议、账号权限、入职引导安排、合规归档记录；\nC（客户）：新员工、用人部门、HRBP、薪酬社保模块（下游）。\n（3）优化措施与预期效果：\n①统一流程与表单标准化（E/S）：将 6 个业务单元的差异化流程统一为集团标准模板，预期表单字段减少 30%、办理时长由 2 天缩短至 0.5 天；\n②搭建员工自助入职平台（I/A）：候选人在线提交材料、电子签劳动合同，信息自动写入 eHR 并触发权限开通，预期人工录入工时下降 70%、数据差错率下降至 1% 以下；\n③建立服务台与进度可视化（服务质效）：员工可实时查询入职办理进度，预期一次解决率提升至 90%、员工满意度显著提升。\n（4）课程思政/合规要素：方案须体现依法合规与数据安全——入职一个月内订立书面劳动合同（规避二倍工资风险）、核验前单位离职证明与竞业限制（规避双重雇佣与商业秘密风险）、体检与背景调查须取得候选人书面授权并按最小必要原则处理个人信息（遵守《个人信息保护法》）；同时体现“以员工为中心”的服务意识与精益求精的精益职业素养。","explanation":"","scoring":"评分要点：6 个模块每答出 1 项得 0.5 分；SIPOC 五要素答出 4 项以上得 3 分；3 条措施各 1 分（须含预期效果）；思政/合规要素 1 分。重点考查系统性思维、工具运用与价值引领。"}],"meta":{"course":"《人力资源共享服务》","code":"SX10401014","papers":5,"per_paper":100,"counts":{"single":100,"multi":50,"judge":50,"short":20,"task":10},"total_objective":200}};
+var QS = DATA.questions;
+var QIDX = {};
+for (var _i = 0; _i < QS.length; _i++) { QIDX[QS[_i].id] = _i; }
+
+var LS_KEY = "hrssc_srs_v1";
+var NICK_KEY = "hrssc_nick_v1";
+var DAY = 86400000;
+
+var store = loadStore();
+var S = null;
+
+/* ============ 页内弹窗：微信内置浏览器禁用原生 prompt/confirm/alert ============ */
+function openDlg(opt, cb) {
+  var dlg = document.getElementById("dlg");
+  var t = document.getElementById("dlgTitle");
+  var m = document.getElementById("dlgMsg");
+  var inp = document.getElementById("dlgInput");
+  var btns = document.getElementById("dlgBtns");
+  t.textContent = opt.title || "";
+  m.textContent = opt.msg || "";
+  if (opt.input) { inp.classList.remove("hide"); inp.value = opt.value || ""; }
+  else { inp.classList.add("hide"); }
+  while (btns.firstChild) btns.removeChild(btns.firstChild);
+  dlg._cb = cb;
+  var list = opt.buttons || [{ label: "确定", cls: "primary", value: true }];
+  for (var i = 0; i < list.length; i++) {
+    (function (b) {
+      var el = document.createElement("button");
+      el.className = "btn " + (b.cls || "");
+      el.textContent = b.label;
+      el.onclick = function () {
+        var v = b.value;
+        if (opt.input) v = (b.value === true) ? inp.value : null;
+        dlg.classList.add("hide");
+        if (dlg._cb) dlg._cb(v);
+        dlg._cb = null;
+      };
+      btns.appendChild(el);
+    })(list[i]);
+  }
+  dlg.classList.remove("hide");
+  if (opt.input) setTimeout(function () { try { inp.focus(); } catch (e) {} }, 120);
+}
+function uiAlert(msg) {
+  openDlg({ title: "提示", msg: msg, buttons: [{ label: "知道了", cls: "primary", value: true }] }, null);
+}
+function uiConfirm(msg, onYes) {
+  openDlg({ title: "请确认", msg: msg, buttons: [
+    { label: "取消", cls: "ghost", value: false },
+    { label: "确定", cls: "primary", value: true }
+  ] }, function (v) { if (v && onYes) onYes(); });
+}
+function uiPrompt(title, msg, def, onDone) {
+  openDlg({ title: title, msg: msg, input: true, value: def || "",
+    buttons: [{ label: "取消", cls: "ghost", value: false },
+              { label: "确定", cls: "primary", value: true }] },
+    function (v) { if (onDone) onDone(v === null ? null : v); });
+}
+
+/* ============ 存储 ============ */
+function loadStore() {
+  try {
+    var raw = localStorage.getItem(LS_KEY);
+    if (raw) {
+      var d = JSON.parse(raw);
+      if (d && d.items) return d;
+    }
+  } catch (e) {}
+  return { items: {}, updated: 0 };
+}
+function saveStore() {
+  store.updated = Date.now();
+  try { localStorage.setItem(LS_KEY, JSON.stringify(store)); } catch (e) {}
+}
+function rec(id) {
+  if (!store.items[id]) store.items[id] = { seen:0, right:0, wrong:0, box:0, due:0, ease:2.5, ivl:0, last:0 };
+  return store.items[id];
+}
+function schedule(id, grade) {
+  var r = rec(id);
+  r.seen++;
+  if (grade === 3) r.right++;
+  else if (grade === 1) r.wrong++;
+  if (grade === 1) { r.box = 0; r.ease = Math.max(1.3, r.ease - 0.2); r.ivl = 0.5; }
+  else if (grade === 2) { r.box = Math.max(1, r.box); r.ease = Math.max(1.3, r.ease - 0.15); r.ivl = r.ivl ? r.ivl * 1.6 : 1; }
+  else { r.box++; r.ivl = r.ivl ? r.ivl * r.ease : 1; }
+  r.due = Date.now() + Math.round(r.ivl) * DAY;
+  r.last = Date.now();
+  saveStore();
+}
+
+/* ============ 署名 ============ */
+function getNick() { try { return localStorage.getItem(NICK_KEY) || ""; } catch (e) { return ""; } }
+function setNick(v) { try { localStorage.setItem(NICK_KEY, v); } catch (e) {} }
+function saveName() {
+  var v = (document.getElementById("nameInput").value || "").replace(/^\s+|\s+$/g, "");
+  if (!v) { changeName(); return; }
+  setNick(v.slice(0, 16));
+  renderHome();
+}
+function changeName() {
+  uiPrompt("改名字", "用于成绩单署名，只存在你的手机里，不上传。", getNick(), function (v) {
+    if (v === null) return;
+    setNick(v.replace(/^\s+|\s+$/g, "").slice(0, 16));
+    renderHome();
+  });
+}
+
+/* ============ 首页 ============ */
+var TN = { single:"单选", multi:"多选", judge:"判断", short:"简答", task:"实操" };
+var MODE_LABEL = { practice:"练习", exam:"模拟考", flash:"闪卡", wrong:"错题" };
+
+function renderHome() {
+  var nm = getNick();
+  var nc = document.getElementById("nameCard");
+  if (nc) { if (nm) nc.classList.add("hide"); else nc.classList.remove("hide"); }
+  var nl = document.getElementById("nameLine");
+  if (nl) nl.textContent = nm ? ("当前使用者：" + nm) : "未署名";
+
+  var pg = document.getElementById("paperGrid");
+  var html = "";
+  for (var n = 1; n <= 5; n++) {
+    var cnt = 0, focus = "";
+    for (var i = 0; i < QS.length; i++) {
+      if (QS[i].paper === n) { cnt++; if (!focus) focus = QS[i].focus; }
+    }
+    var f = (focus || "").replace(/第[一二三四五]章/g, "").slice(0, 26);
+    html += '<div class="tile" onclick="startPractice({scope:' + n + ',mode:\'practice\'})">' +
+      '<div class="k">卷 ' + n + '</div><div class="v">' + cnt + ' 题</div>' +
+      '<div class="d">' + escapeHtml(f) + '</div></div>';
+  }
+  pg.innerHTML = html;
+
+  var now = Date.now();
+  var due = 0, wrongN = 0, seenN = 0, rightN = 0, wrongAnsN = 0;
+  var byType = {};
+  var ids = [];
+  for (var id in store.items) {
+    if (!store.items.hasOwnProperty(id)) continue;
+    var r = store.items[id];
+    if (r.seen > 0) {
+      ids.push(id); seenN++;
+      rightN += r.right; wrongAnsN += r.wrong;
+      if (r.wrong > 0) wrongN++;
+      if (r.due && r.due <= now) due++;
+      var q = QS[QIDX[id]];
+      if (q) {
+        if (!byType[q.type]) byType[q.type] = { r: 0, w: 0 };
+        byType[q.type].r += r.right;
+        byType[q.type].w += r.wrong;
+      }
+    }
+  }
+  document.getElementById("dueCount").textContent = due;
+  document.getElementById("wrongCount").textContent = wrongN;
+
+  var box = document.getElementById("statsBox");
+  if (!seenN) {
+    box.innerHTML = '<div class="warnbox">还没有记录。从上面任一项开始，答完一题就会自动记进度。</div>';
+    return;
+  }
+  var acc = Math.round(rightN / (rightN + wrongAnsN) * 100);
+  var cov = Math.round(seenN / QS.length * 100);
+  var rows = "";
+  var order = ["single", "multi", "judge", "short", "task"];
+  for (var k = 0; k < order.length; k++) {
+    var key = order[k], s = byType[key];
+    if (!s) continue;
+    var tot = s.r + s.w, a = tot ? Math.round(s.r / tot * 100) : 0;
+    rows += "<tr><td>" + TN[key] + "</td><td class=\"mono\">" + s.r + "</td><td class=\"mono\">" +
+      s.w + "</td><td class=\"mono\">" + a + "%</td><td><div class=\"bar\" style=\"width:90px\">" +
+      "<i style=\"width:" + a + "%\"></i></div></td></tr>";
+  }
+  box.innerHTML =
+    '<div class="grid g3" style="margin-bottom:10px">' +
+      '<div class="tile" style="cursor:default"><div class="k">覆盖率</div><div class="v">' + cov +
+      '%</div><div class="d">' + seenN + ' / ' + QS.length + ' 题</div></div>' +
+      '<div class="tile" style="cursor:default"><div class="k">正确率</div><div class="v">' + acc +
+      '%</div><div class="d">答对 ' + rightN + ' / ' + (rightN + wrongAnsN) + '</div></div>' +
+      '<div class="tile" style="cursor:default"><div class="k">待攻克</div><div class="v">' + wrongN +
+      '</div><div class="d">错过的题</div></div>' +
+    '</div>' +
+    '<table class="t"><thead><tr><th>题型</th><th>对</th><th>错</th><th>正确率</th><th></th></tr></thead>' +
+    '<tbody>' + rows + '</tbody></table>';
+}
+
+/* ============ 会话启动 ============ */
+function pickQuestions(o) {
+  var list = [];
+  for (var i = 0; i < QS.length; i++) {
+    var q = QS[i];
+    if (o.scope !== "all" && q.paper !== Number(o.scope)) continue;
+    if (o.only) {
+      if (o.only === "short") { if (q.type !== "short" && q.type !== "task") continue; }
+      else if (q.type !== o.only) continue;
+    }
+    list.push(q);
+  }
+  return list;
+}
+
+function shuffleKeepType(list) {
+  var order = { single:0, multi:1, judge:2, short:3, task:4 };
+  var g = {};
+  for (var i = 0; i < list.length; i++) {
+    var t = list[i].type;
+    if (!g[t]) g[t] = [];
+    g[t].push(list[i]);
+  }
+  var keys = [];
+  for (var k in order) { if (order.hasOwnProperty(k) && g[k]) keys.push(k); }
+  keys.sort(function (a, b) { return order[a] - order[b]; });
+  var out = [];
+  for (var j = 0; j < keys.length; j++) {
+    var arr = g[keys[j]].slice();
+    arr.sort(function () { return Math.random() - 0.5; });
+    for (var m = 0; m < arr.length; m++) out.push(arr[m]);
+  }
+  return out;
+}
+
+function startPractice(opt) {
+  var list = pickQuestions(opt);
+  if (!list.length) { uiAlert("这个范围没有题。"); return; }
+  S = { mode:"practice", list: shuffleKeepType(list), i:0, ans:{}, started: Date.now(), showAns:{} };
+  enterQuiz();
+}
+
+function startExamPick() {
+  var btns = [];
+  for (var n = 1; n <= 5; n++) {
+    btns.push({ label: "卷 " + n, cls: n === 1 ? "primary" : "", value: n });
+  }
+  openDlg({ title:"选一套卷", msg:"100 分 / 120 分钟。交卷前不显示对错。", buttons: btns }, function (v) {
+    if (!v) return;
+    var list = [];
+    for (var i = 0; i < QS.length; i++) if (QS[i].paper === v) list.push(QS[i]);
+    S = { mode:"exam", list:list, i:0, ans:{}, started: Date.now(),
+          deadline: Date.now() + 120 * 60000, showAns:{} };
+    enterQuiz();
+  });
+}
+
+function startSRS() {
+  var now = Date.now(), list = [], fallback = [];
+  for (var i = 0; i < QS.length; i++) {
+    var r = store.items[QS[i].id];
+    if (!r || r.seen <= 0) continue;
+    if (r.due === 0 || r.due <= now) list.push(QS[i]);
+    if (r.box < 5) fallback.push(QS[i]);
+  }
+  if (!list.length) {
+    if (!fallback.length) { uiAlert("没有到期的卡片。先去练几道题，系统会自动按间隔排复习。"); return; }
+    fallback.sort(function () { return Math.random() - 0.5; });
+    S = { mode:"flash", list: fallback.slice(0, 40), i:0, ans:{}, started: Date.now(), showAns:{} };
+  } else {
+    S = { mode:"flash", list: list.slice(0, 60), i:0, ans:{}, started: Date.now(), showAns:{} };
+  }
+  enterQuiz();
+}
+
+function showWrong() {
+  var ids = Object.keys(store.items).filter(function (id) { return store.items[id].wrong > 0; });
+  ids.sort(function (a, b) { return store.items[b].wrong - store.items[a].wrong; });
+  if (!ids.length) { uiAlert("还没有错题记录。先练几轮再来。"); return; }
+  var list = [];
+  for (var i = 0; i < ids.length; i++) {
+    var q = QS[QIDX[ids[i]]];
+    if (q) list.push(q);
+  }
+  S = { mode:"wrong", list:list, i:0, ans:{}, started: Date.now(), showAns:{} };
+  enterQuiz();
+}
+
+function retryWrongOnly() {
+  if (!S) return;
+  var ids = [];
+  for (var id in S.ans) {
+    if (!S.ans.hasOwnProperty(id)) continue;
+    var a = S.ans[id], q = QS[QIDX[id]];
+    if (!q) continue;
+    if (q.type === "short" || q.type === "task") { if (a.grade === 1) ids.push(id); }
+    else if (!a.correct) ids.push(id);
+  }
+  if (!ids.length) { uiAlert("这次没错题。"); return; }
+  var list = [];
+  for (var i = 0; i < ids.length; i++) { var q2 = QS[QIDX[ids[i]]]; if (q2) list.push(q2); }
+  S = { mode:"wrong", list:list, i:0, ans:{}, started: Date.now(), showAns:{} };
+  enterQuiz();
+}
+
+function enterQuiz() {
+  document.getElementById("vHome").classList.add("hide");
+  document.getElementById("vResult").classList.add("hide");
+  document.getElementById("vQuiz").classList.remove("hide");
+  document.getElementById("nav").classList.remove("hide");
+  renderQ();
+}
+function goHome() {
+  S = null;
+  document.getElementById("vQuiz").classList.add("hide");
+  document.getElementById("vResult").classList.add("hide");
+  document.getElementById("vHome").classList.remove("hide");
+  document.getElementById("nav").classList.add("hide");
+  renderHome();
+}
+
+/* ============ 渲染 ============ */
+function renderQ() {
+  if (!S) return;
+  var q = S.list[S.i];
+  var a = S.ans[q.id];
+  var revealed = (S.mode === "exam" && !S.submitted) ? false : !!S.showAns[q.id];
+
+  document.getElementById("qBadge").textContent = TN[q.type];
+  document.getElementById("qBadge").className = "badge " + q.type;
+  document.getElementById("qMeta").textContent =
+    MODE_LABEL[S.mode] + " · 卷" + q.paper + " 第" + q.num + "题" +
+    (store.items[q.id] ? " · 见过" + store.items[q.id].seen + "次" : "");
+
+  document.getElementById("qPos").textContent = (S.i + 1) + " / " + S.list.length;
+  document.getElementById("qProg").style.width = ((S.i + 1) / S.list.length * 100) + "%";
+
+  var tm = document.getElementById("qTimer");
+  if (S.mode === "exam" && !S.submitted) {
+    tm.textContent = "剩余 " + fmtMS(Math.max(0, S.deadline - Date.now()));
+  } else { tm.textContent = ""; }
+
+  var ctx = document.getElementById("qCtx");
+  if (q.context && q.context.length) {
+    ctx.textContent = q.context.join("\n");
+    ctx.classList.remove("hide");
+  } else { ctx.textContent = ""; ctx.classList.add("hide"); }
+
+  document.getElementById("qStem").textContent = q.stem.replace(/^\d+．/, "");
+
+  var box = document.getElementById("qOpts");
+  while (box.firstChild) box.removeChild(box.firstChild);
+  if (q.type === "single" || q.type === "multi" || q.type === "judge") {
+    var opts = (q.type === "judge") ? { A:"正确", B:"错误" } : q.options;
+    var chosen = a ? a.chosen : [];
+    var keys = [];
+    for (var k in opts) if (opts.hasOwnProperty(k)) keys.push(k);
+    keys.sort();
+    var ansKeys = (q.type === "judge") ? [q.answer === "正确" ? "A" : "B"] : q.answer.split("");
+    for (var i = 0; i < keys.length; i++) {
+      (function (key) {
+        var el = document.createElement("div");
+        el.className = "opt";
+        var isSel = chosen.indexOf(key) >= 0;
+        if (isSel) el.classList.add("sel");
+        if (revealed) {
+          if (ansKeys.indexOf(key) >= 0) el.classList.add("right");
+          else if (isSel) el.classList.add("wrong");
+          else el.classList.add("dim");
+        }
+        el.innerHTML = '<span class="lab">' + key + '</span><span>' + escapeHtml(opts[key]) + '</span>';
+        el.onclick = function () { chooseOpt(q, key, revealed); };
+        box.appendChild(el);
+      })(keys[i]);
+    }
+  }
+
+  var bar = document.getElementById("qBar");
+  while (bar.firstChild) bar.removeChild(bar.firstChild);
+  var subj = (q.type === "short" || q.type === "task");
+
+  if (!revealed) {
+    if (q.type === "multi") addBtn(bar, "提交本题", "primary", function () { submitMulti(q); });
+    if (subj) addBtn(bar, "显示参考答案", "primary", function () { reveal(q); });
+  } else {
+    if (subj) {
+      addBtn(bar, "忘了 (1)", "", function () { gradeSubj(q, 1); });
+      addBtn(bar, "想起但费劲 (2)", "", function () { gradeSubj(q, 2); });
+      addBtn(bar, "顺利 (3)", "primary", function () { gradeSubj(q, 3); });
+    } else {
+      addBtn(bar, "再答一次", "", function () { retry(q); });
+    }
+  }
+
+  var ok = document.getElementById("qAnsOk"), bad = document.getElementById("qAnsBad");
+  var exp = document.getElementById("qExp"), ref = document.getElementById("qRef");
+  var hint = document.getElementById("qHint");
+  ok.classList.add("hide"); bad.classList.add("hide");
+  exp.classList.add("hide"); ref.classList.add("hide"); hint.classList.add("hide");
+
+  if (revealed) {
+    if (!a) {
+      ok.classList.remove("hide");
+      ok.innerHTML = "【参考答案】\n" + escapeHtml(q.answer);
+      if (q.scoring) { ref.classList.remove("hide"); ref.innerHTML = "<b>【评分说明】</b>\n" + escapeHtml(q.scoring); }
+    } else if (subj) {
+      var g = a.grade;
+      (g === 1 ? bad : ok).classList.remove("hide");
+      (g === 1 ? bad : ok).innerHTML = "自评：" + (g === 1 ? "忘了" : g === 2 ? "想起但费劲" : "顺利") +
+        "\n【参考答案】\n" + escapeHtml(q.answer);
+      if (q.scoring) { ref.classList.remove("hide"); ref.innerHTML = "<b>【评分说明】</b>\n" + escapeHtml(q.scoring); }
+    } else {
+      (a.correct ? ok : bad).classList.remove("hide");
+      var myAns = (q.type === "judge") ? (a.chosen[0] === "A" ? "正确" : "错误") : a.chosen.slice().sort().join("");
+      (a.correct ? ok : bad).innerHTML =
+        (a.correct ? "正确 ✓" : "错　你选：" + (myAns || "（未选）")) +
+        "\n【正确答案】" + escapeHtml(q.answer);
+      if (q.explanation) {
+        exp.classList.remove("hide");
+        exp.innerHTML = "<b>【解析】</b>\n" + escapeHtml(q.explanation);
+      }
+    }
+  }
+
+  document.getElementById("qKeys").innerHTML = subj
+    ? '<span class="kbd">1/2/3</span> 自评　<span class="kbd">←/→</span> 翻页'
+    : '<span class="kbd">A-D</span> 选项　<span class="kbd">←/→</span> 翻页';
+
+  updateNav();
+}
+
+function addBtn(bar, label, cls, fn) {
+  var b = document.createElement("button");
+  b.className = "btn " + (cls || "");
+  b.textContent = label;
+  b.onclick = fn;
+  bar.appendChild(b);
+}
+
+function optsOf(q) { return (q.type === "judge") ? { A:"正确", B:"错误" } : q.options; }
+
+function paintSel(q, a) {
+  var keys = [];
+  var o = optsOf(q);
+  for (var k in o) if (o.hasOwnProperty(k)) keys.push(k);
+  keys.sort();
+  var els = document.querySelectorAll("#qOpts .opt");
+  for (var i = 0; i < els.length; i++) {
+    var on = a.chosen.indexOf(keys[i]) >= 0;
+    if (on) els[i].classList.add("sel"); else els[i].classList.remove("sel");
+  }
+}
+
+function chooseOpt(q, k, revealed) {
+  if (revealed) return;
+  if (!S.ans[q.id]) S.ans[q.id] = { chosen: [], flagged: false };
+  var a = S.ans[q.id];
+  var examPhase = (S.mode === "exam" && !S.submitted);
+
+  if (q.type === "multi") {
+    var ix = a.chosen.indexOf(k);
+    if (ix >= 0) a.chosen.splice(ix, 1); else a.chosen.push(k);
+    paintSel(q, a);
+    updateNav();
+    return;
+  }
+  a.chosen = [k];
+  if (examPhase) { paintSel(q, a); updateNav(); return; }
+  judge(q);
+}
+
+function submitMulti(q) {
+  var a = S.ans[q.id];
+  if (!a || !a.chosen.length) {
+    var h = document.getElementById("qHint");
+    h.classList.remove("hide");
+    h.textContent = "先选至少一个选项，再点「提交本题」。多选题按完全匹配判分。";
+    return;
+  }
+  if (S.mode === "exam" && !S.submitted) { renderQ(); return; }
+  judge(q);
+}
+
+function judge(q) {
+  var a = S.ans[q.id];
+  if (!a || !a.chosen.length) return;
+  var ansKeys = (q.type === "judge") ? [q.answer === "正确" ? "A" : "B"] : q.answer.split("");
+  var mine = a.chosen.slice().sort(), tgt = ansKeys.slice().sort();
+  var okAll = (mine.length === tgt.length);
+  for (var i = 0; i < mine.length; i++) if (mine[i] !== tgt[i]) okAll = false;
+  a.correct = okAll;
+  a.judged = true;
+  S.showAns[q.id] = true;
+  schedule(q.id, a.correct ? 3 : 1);
+  renderQ();
+}
+
+function reveal(q) { S.showAns[q.id] = true; renderQ(); }
+
+function gradeSubj(q, g) {
+  if (!S.ans[q.id]) S.ans[q.id] = { chosen: [], flagged: false };
+  var a = S.ans[q.id];
+  a.grade = g; a.correct = (g === 3); a.judged = true;
+  S.showAns[q.id] = true;
+  schedule(q.id, g);
+  renderQ();
+}
+
+function retry(q) {
+  delete S.showAns[q.id];
+  delete S.ans[q.id];
+  renderQ();
+}
+
+/* ============ 导航 ============ */
+function updateNav() {
+  var q = S.list[S.i];
+  var main = document.getElementById("navMain");
+  document.getElementById("navPrev").disabled = (S.i === 0);
+  var examRunning = (S.mode === "exam" && !S.submitted);
+  var nextBtn = document.getElementById("navNext");
+  if (nextBtn) { if (examRunning) nextBtn.classList.add("hide"); else nextBtn.classList.remove("hide"); }
+
+  if (examRunning) {
+    main.textContent = (S.i === S.list.length - 1) ? "交卷" : "下一题";
+  } else if (S.i >= S.list.length - 1) {
+    main.textContent = "查看结果";
+  } else {
+    main.textContent = "下一题";
+  }
+}
+
+function mainAction() {
+  if (!S) return;
+  var examRunning = (S.mode === "exam" && !S.submitted);
+  if (examRunning) {
+    if (S.i === S.list.length - 1) submitExam();
+    else nextQ();
+    return;
+  }
+  if (S.i >= S.list.length - 1) { showResult(); return; }
+  nextQ();
+}
+function nextQ() { if (S && S.i < S.list.length - 1) { S.i++; renderQ(); scrollTop(); } }
+function prevQ() { if (S && S.i > 0) { S.i--; renderQ(); scrollTop(); } }
+function scrollTop() { try { window.scrollTo(0, 0); } catch (e) {} }
+
+function quitSession() {
+  if (!S) { goHome(); return; }
+  var done = 0;
+  for (var id in S.ans) if (S.ans.hasOwnProperty(id)) done++;
+  var msg = done ? "退出？已作答的记录会保留在进度里。" : "还没答题，确定退出？";
+  uiConfirm(msg, function () { goHome(); });
+}
+
+/* ============ 结算 ============ */
+function submitExam() {
+  var un = 0;
+  for (var i = 0; i < S.list.length; i++) {
+    var q = S.list[i], a = S.ans[q.id];
+    if (!a) { un++; continue; }
+    if (q.type === "short" || q.type === "task") { if (!a.grade) un++; }
+    else if (!a.chosen.length) un++;
+  }
+  if (un) { uiConfirm("还有 " + un + " 题没答，确认交卷？", doSubmitExam); return; }
+  doSubmitExam();
+}
+
+function doSubmitExam() {
+  S.submitted = true;
+  for (var i = 0; i < S.list.length; i++) {
+    var q = S.list[i], a = S.ans[q.id];
+    if (!a) continue;
+    if (q.type !== "short" && q.type !== "task") {
+      if (a.chosen.length && !a.judged) {
+        var ansKeys = (q.type === "judge") ? [q.answer === "正确" ? "A" : "B"] : q.answer.split("");
+        var mine = a.chosen.slice().sort(), tgt = ansKeys.slice().sort();
+        var okAll = (mine.length === tgt.length);
+        for (var j = 0; j < mine.length; j++) if (mine[j] !== tgt[j]) okAll = false;
+        a.correct = okAll;
+        a.judged = true;
+      }
+      S.showAns[q.id] = true;
+      schedule(q.id, a.correct ? 3 : 1);
+    }
+  }
+  showResult();
+}
+
+function scoreOf() {
+  var got = 0, total = 0;
+  var W = { single: 1.5, multi: 2, judge: 1 };
+  for (var i = 0; i < S.list.length; i++) {
+    var q = S.list[i];
+    if (!W[q.type]) continue;
+    total += W[q.type];
+    var a = S.ans[q.id];
+    if (a && a.correct) got += W[q.type];
+  }
+  return { got: got, total: total };
+}
+
+function showResult() {
+  document.getElementById("vQuiz").classList.add("hide");
+  document.getElementById("nav").classList.add("hide");
+  document.getElementById("vResult").classList.remove("hide");
+  var sc = scoreOf();
+  var acc = sc.total ? Math.round(sc.got / sc.total * 100) : 0;
+  var subjCount = 0;
+  for (var i = 0; i < S.list.length; i++) {
+    if (S.list[i].type === "short" || S.list[i].type === "task") subjCount++;
+  }
+  var minutes = Math.round((Date.now() - S.started) / 60000);
+
+  document.getElementById("resHead").innerHTML =
+    '<div style="font-size:20px;font-weight:700">' +
+      (S.mode === "exam" ? "考试完成" : MODE_LABEL[S.mode] + "完成") + '</div>' +
+    '<div class="tiny" style="margin-top:4px">用时 ' + minutes + ' 分钟 · 共 ' + S.list.length + ' 题' +
+      (subjCount ? '（其中 ' + subjCount + ' 道主观题按自评，不计入客观分）' : '') + '</div>' +
+    '<div class="grid g3" style="margin-top:12px">' +
+      '<div class="tile" style="cursor:default"><div class="k">客观得分</div><div class="v">' + sc.got + ' / ' + sc.total + '</div></div>' +
+      '<div class="tile" style="cursor:default"><div class="k">正确率</div><div class="v">' + acc + '%</div></div>' +
+      '<div class="tile" style="cursor:default"><div class="k">进复习队列</div><div class="v">' +
+        Object.keys(S.ans).length + '</div></div>' +
+    '</div>';
+
+  var rows = "";
+  for (var k = 0; k < S.list.length; k++) {
+    (function (ix) {
+      var q = S.list[ix], a = S.ans[q.id];
+      var subj = (q.type === "short" || q.type === "task");
+      var mark, cls;
+      if (!a || (!a.chosen.length && !a.grade)) { mark = "未答"; cls = ""; }
+      else if (subj) { mark = (a.grade === 1 ? "忘了" : a.grade === 2 ? "费劲" : "顺利"); cls = (a.grade === 1 ? "bad" : "ok"); }
+      else { mark = a.correct ? "对" : "错"; cls = a.correct ? "ok" : "bad"; }
+      rows += '<tr><td class="mono">' + (ix + 1) + '</td><td>' + TN[q.type] + '</td>' +
+        '<td>' + escapeHtml(q.stem.replace(/^\d+．/, "").slice(0, 40)) + '…</td>' +
+        '<td><span class="badge ' + q.type + '">' + mark + '</span></td>' +
+        '<td><button class="btn sm ghost" onclick="reviewOne(' + ix + ')">看题</button></td></tr>';
+    })(k);
+  }
+  document.getElementById("resBody").innerHTML =
+    '<table class="t"><thead><tr><th>#</th><th>题型</th><th>题干</th><th>结果</th><th></th></tr></thead>' +
+    '<tbody>' + rows + '</tbody></table>';
+}
+
+function reviewOne(ix) {
+  S.i = ix;
+  S.showAns[S.list[ix].id] = true;
+  document.getElementById("vResult").classList.add("hide");
+  document.getElementById("vQuiz").classList.remove("hide");
+  document.getElementById("nav").classList.remove("hide");
+  renderQ();
+}
+
+/* ============ 分享 / 导出 ============ */
+function summaryText() {
+  var now = Date.now();
+  var seenN = 0, rightN = 0, wrongN = 0, weak = 0;
+  for (var id in store.items) {
+    if (!store.items.hasOwnProperty(id)) continue;
+    var r = store.items[id];
+    if (r.seen > 0) { seenN++; rightN += r.right; wrongN += r.wrong; }
+    if (r.wrong > 0) weak++;
+  }
+  var acc = (rightN + wrongN) ? Math.round(rightN / (rightN + wrongN) * 100) : 0;
+  var cov = Math.round(seenN / QS.length * 100);
+  var nm = getNick() || "同学";
+  var d = new Date();
+  var ds = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
+  return "【HRSSC 人力资源共享服务 · 训练记录】\n" + nm +
+    "\n题库覆盖 " + cov + "%（" + seenN + "/" + QS.length + " 题）" +
+    "\n作答正确率 " + acc + "%（对 " + rightN + " / 共 " + (rightN + wrongN) + "）" +
+    "\n待攻克错题 " + weak + " 道" +
+    "\n日期 " + ds +
+    "\n\n——《人力资源共享服务》（SX10401014）5 套模拟卷";
+}
+
+function copyShareText() {
+  var txt = summaryText();
+  var out = document.getElementById("shareOut");
+  out.classList.remove("hide");
+  out.textContent = txt;
+  var done = function () { out.textContent = txt + "\n\n已复制，去微信粘贴发送。"; };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(txt).then(done, function () { fallbackCopy(txt, done); });
+  } else fallbackCopy(txt, done);
+}
+function fallbackCopy(txt, done) {
+  var ta = document.createElement("textarea");
+  ta.value = txt;
+  ta.style.position = "fixed"; ta.style.top = "0"; ta.style.opacity = "0";
+  document.body.appendChild(ta);
+  ta.focus(); ta.select();
+  var ok = false;
+  try { ok = document.execCommand("copy"); } catch (e) {}
+  document.body.removeChild(ta);
+  if (ok) done();
+  else uiAlert("当前浏览器不允许自动复制，请长按上面的文字手动复制。");
+}
+
+function exportWrongDoc() {
+  var ids = Object.keys(store.items).filter(function (id) { return store.items[id].wrong > 0; });
+  ids.sort(function (a, b) { return store.items[b].wrong - store.items[a].wrong; });
+  if (!ids.length) { uiAlert("还没有错题。先练几轮再来导出。"); return; }
+  var nm = getNick() || "同学";
+  var TN2 = { single:"单选题", multi:"多选题", judge:"判断题", short:"简答题", task:"实操题" };
+  var body = "";
+  for (var i = 0; i < ids.length; i++) {
+    var q = QS[QIDX[ids[i]]];
+    if (!q) continue;
+    var r = store.items[ids[i]];
+    body += '<p><b>' + (i + 1) + '. （卷' + q.paper + ' · ' + TN2[q.type] + '）错了 ' + r.wrong + ' 次</b><br>' +
+      escHtml(q.stem.replace(/^\d+．/, "").replace(/[\u3000]+/g, " ")) + '</p>';
+    if (q.options && Object.keys(q.options).length) {
+      var ks = Object.keys(q.options).sort(), lines = [];
+      for (var k = 0; k < ks.length; k++) lines.push(ks[k] + ". " + escHtml(q.options[ks[k]]));
+      body += '<p style="margin-left:24px">' + lines.join("<br>") + '</p>';
+    }
+    if (q.context && q.context.length) {
+      body += '<p style="margin-left:24px;color:#555">' + escHtml(q.context.join("\n")) + '</p>';
+    }
+    body += '<p style="margin-left:24px;background:#f4f6f9;padding:6px"><b>答案：</b>' + escHtml(q.answer) + '</p>';
+    if (q.explanation) body += '<p style="margin-left:24px"><b>解析：</b>' + escHtml(q.explanation) + '</p>';
+    if (q.scoring) body += '<p style="margin-left:24px;color:#666"><b>评分说明：</b>' + escHtml(q.scoring) + '</p>';
+    body += "<br>";
+  }
+  var d = new Date();
+  var ds = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
+  var html = '<html><head><meta charset="utf-8"><title>HRSSC 错题本</title></head>' +
+    '<body style="font-family:Microsoft YaHei,sans-serif;font-size:11pt;line-height:1.7">' +
+    '<h2 style="text-align:center">《人力资源共享服务》错题本</h2>' +
+    '<p style="text-align:center;color:#666">' + escHtml(nm) + '　|　共 ' + ids.length + ' 道　|　' + ds + '</p>' +
+    '<hr>' + body + '</body></html>';
+
+  var blob = new Blob(["\ufeff", html], { type: "application/msword" });
+  var a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "HRSSC错题本_" + nm + "_" + ds + ".doc";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(function () { URL.revokeObjectURL(a.href); }, 3000);
+}
+
+/* ============ 备份 ============ */
+function exportProgress() {
+  var blob = new Blob([JSON.stringify(store, null, 1)], { type: "application/json" });
+  var a = document.createElement("a");
+  var d = new Date();
+  var ds = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
+  a.href = URL.createObjectURL(blob);
+  a.download = "hrssc_progress_" + ds + ".json";
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+}
+function importProgress(el) {
+  var f = el.files[0];
+  if (!f) return;
+  var r = new FileReader();
+  r.onload = function () {
+    try {
+      var d = JSON.parse(r.result);
+      if (!d || !d.items) throw new Error("格式不对");
+      store = d;
+      saveStore();
+      renderHome();
+      uiAlert("已导入。");
+    } catch (e) { uiAlert("导入失败：" + e.message); }
+  };
+  r.readAsText(f);
+  el.value = "";
+}
+function resetProgress() {
+  uiConfirm("清空全部答题记录与复习排程？", function () {
+    store = { items: {}, updated: 0 };
+    saveStore();
+    renderHome();
+  });
+}
+
+/* ============ 工具 ============ */
+function escapeHtml(s) {
+  return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+    return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+  });
+}
+function escHtml(s) {
+  return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;").replace(/\n/g, "<br>");
+}
+function pad2(n) { return (n < 10 ? "0" : "") + n; }
+function fmtMS(ms) {
+  var m = Math.floor(ms / 60000), s = Math.floor((ms % 60000) / 1000);
+  return pad2(m) + ":" + pad2(s);
+}
+
+/* ============ 键盘（桌面端） ============ */
+document.addEventListener("keydown", function (e) {
+  if (!S) return;
+  var tag = e.target && e.target.tagName;
+  if (tag === "INPUT" || tag === "SELECT" || tag === "TEXTAREA") return;
+  if (document.getElementById("dlg").classList.contains("hide") === false) return;
+
+  var q = S.list[S.i];
+  var revealed = (S.mode === "exam" && !S.submitted) ? false : !!S.showAns[q.id];
+
+  if (e.key === "ArrowRight") { nextQ(); e.preventDefault(); return; }
+  if (e.key === "ArrowLeft") { prevQ(); e.preventDefault(); return; }
+  if (e.key === "Enter") { mainAction(); e.preventDefault(); return; }
+  if (q.type === "short" || q.type === "task") {
+    if (revealed && (e.key === "1" || e.key === "2" || e.key === "3")) {
+      gradeSubj(q, Number(e.key));
+      e.preventDefault();
+    }
+    return;
+  }
+  var map = { "1":"A", "2":"B", "3":"C", "4":"D", "a":"A", "b":"B", "c":"C", "d":"D" };
+  var k = map[(e.key || "").toLowerCase()];
+  if (k && !revealed) { chooseOpt(q, k, false); e.preventDefault(); }
+});
+
+/* ============ 计时器 ============ */
+setInterval(function () {
+  if (S && S.mode === "exam" && !S.submitted) {
+    var left = S.deadline - Date.now();
+    document.getElementById("qTimer").textContent = "剩余 " + fmtMS(Math.max(0, left));
+    if (left <= 0) { submitExam(); }
+  }
+}, 1000);
+
+renderHome();
+</script>
+</body>
+</html>
